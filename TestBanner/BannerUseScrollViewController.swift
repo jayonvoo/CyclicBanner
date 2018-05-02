@@ -16,32 +16,34 @@ class BannerUseScrollViewController: UIViewController {
     var timer: Timer?
     var dbDelegate = DatabaseController()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         dbDelegate.viewDidLoad()
         print(dbDelegate.getWiFiAddress()!)
         addTimer()
+        
+        
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        let alertController = UIAlertController(title: "Enter Ip", message: "", preferredStyle: .alert)
-        
-        alertController.addTextField(configurationHandler:{(textField) in
-            textField.placeholder = "ip address"
-        })
-        
-        let okAction = UIAlertAction(title: "確定", style: .default, handler:{
-            (alert) -> Void in
-        })
-        
-        alertController.addAction(okAction)
-        
-        present(alertController, animated: true, completion: nil)
-    }
-    
+    /*
+     override func viewDidAppear(_ animated: Bool) {
+     let alertController = UIAlertController(title: "Enter Ip", message: "", preferredStyle: .alert)
+     
+     alertController.addTextField(configurationHandler:{(textField) in
+     textField.placeholder = "ip address"
+     })
+     
+     let okAction = UIAlertAction(title: "確定", style: .default, handler:{
+     (alert) -> Void in
+     })
+     
+     alertController.addAction(okAction)
+     
+     present(alertController, animated: true, completion: nil)
+     }
+     */
     func setupViews() {
-        automaticallyAdjustsScrollViewInsets = false
         
         do {
             scrollView = UIScrollView(frame: CGRect(x: 0, y: 200, width: kScreenWidth, height: 250))
@@ -51,7 +53,7 @@ class BannerUseScrollViewController: UIViewController {
         
         do {
             pageView = UIPageControl(frame: CGRect(x: 0, y: kScreenHeight - 30, width: kScreenWidth, height: 30))
-          //  view.addSubview(pageView)
+            //  view.addSubview(pageView)
             pageView.numberOfPages = imageCount
             pageView.currentPage = 0
             //pageView.pageIndicatorTintColor = UIColor.white
@@ -60,12 +62,46 @@ class BannerUseScrollViewController: UIViewController {
         
         do {
             /// 只使用3个UIImageView，依次设置好最后一个，第一个，第二个图片，这里面使用取模运算。
-            for index in 0..<3 {
-                let imageView = UIImageView(frame: CGRect(x: CGFloat(index) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
-                imageView.image = UIImage(named: "pic0\((index + 3) % 3).jpg")
-                
-                scrollView.addSubview(imageView)
-            }
+            
+            /*
+             for index in 0..<3 {
+             let imageView = UIImageView(frame: CGRect(x: CGFloat(index) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
+             imageView.image = UIImage(named: "pic0\((index + 3) % 3).jpg")
+             
+             scrollView.addSubview(imageView)
+             }
+             */
+            let webView = UIWebView(frame: CGRect(x: CGFloat(0) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
+            let embedHTML = "<html>" +
+                "<body style='margin:0px;padding:0px;'>" +
+                "<script type='text/javascript' src='http://www.youtube.com/iframe_api'></script>" +
+                "<script type='text/javascript'>" +
+                "function onYouTubeIframeAPIReady()" +
+                "{" +
+                "    ytplayer=new YT.Player('playerId',{events:{onReady:onPlayerReady}})" +
+                "}" +
+                "function onPlayerReady(a)" +
+                "{ " +
+                "   a.target.playVideo(); " +
+                "}" +
+                "</script>" +
+                "   <iframe id='playerId' type='text/html' width='\(kScreenWidth)' height='250' src='http://www.youtube.com/embed/JlGkuFI-lj0?enablejsapi=1&rel=0&playsinline=1&autoplay=1' frameborder='1'>" +
+                "        </body>" +
+            "</html>"
+            let imageView = UIImageView(frame: CGRect(x: CGFloat(1) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
+            imageView.image = UIImage(named: "pic00.jpg")
+            
+            webView.allowsInlineMediaPlayback = true
+            webView.mediaPlaybackRequiresUserAction = false
+            self.view.addSubview(webView)
+            //webView.loadHTMLString(embedHTML, baseURL:NSBundle.mainBundle().resourceURL!)
+            webView.loadHTMLString(embedHTML, baseURL: Bundle.main.resourceURL)
+            automaticallyAdjustsScrollViewInsets = false
+            
+            scrollView.addSubview(webView)
+            scrollView.addSubview(imageView)
+            
+            
         }
         
         do {
@@ -84,7 +120,7 @@ class BannerUseScrollViewController: UIViewController {
         //            self?.nextImage()
         //        })
         
-        timer = Timer(timeInterval: 2, repeats: true, block: { [weak self] _ in
+        timer = Timer(timeInterval: 10, repeats: true, block: { [weak self] _ in
             self?.nextImage()
         })
         
@@ -125,12 +161,14 @@ class BannerUseScrollViewController: UIViewController {
     /// 重新加载图片，重新设置3个imageView
     func reloadImage() {
         let currentIndex = pageView.currentPage
-        let nextIndex = (currentIndex + 1) % 3
-        let preIndex = (currentIndex + 2) % 3
+        let nextIndex = (currentIndex + 1) % 4
+        let preIndex = (currentIndex + 3) % 4
         
         (scrollView.subviews[0] as! UIImageView).image = UIImage(named: "pic0\(preIndex).jpg")
         (scrollView.subviews[1] as! UIImageView).image = UIImage(named: "pic0\(currentIndex).jpg")
         (scrollView.subviews[2] as! UIImageView).image = UIImage(named: "pic0\(nextIndex).jpg")
+        //  (scrollView.subviews[3] as! UIWebView) = webView
+        
     }
 }
 
@@ -142,10 +180,10 @@ extension BannerUseScrollViewController: UIScrollViewDelegate {
     }
     
     /// 当停止滚动的时候重新设置三个ImageView的内容，然后悄悄滴显示中间那个imageView
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        reloadImage()
-        scrollView.setContentOffset(CGPoint(x: kScreenWidth, y: 0), animated: false)
-    }
+    /* func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+     reloadImage()
+     scrollView.setContentOffset(CGPoint(x: kScreenWidth, y: 0), animated: false)
+     }*/
     
     /// 停止拖拽，开始timer, 并且判断是显示上一个图片还是下一个图片
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
