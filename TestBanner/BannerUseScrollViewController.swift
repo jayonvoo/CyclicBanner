@@ -51,11 +51,11 @@ class BannerUseScrollViewController: UIViewController {
         
         do {
             pageView = UIPageControl(frame: CGRect(x: 0, y: kScreenHeight - 30, width: kScreenWidth, height: 30))
-            view.addSubview(pageView)
+          //  view.addSubview(pageView)
             pageView.numberOfPages = imageCount
             pageView.currentPage = 0
-            pageView.pageIndicatorTintColor = UIColor.white
-            pageView.currentPageIndicatorTintColor = UIColor.blue
+            //pageView.pageIndicatorTintColor = UIColor.white
+            //pageView.currentPageIndicatorTintColor = UIColor.blue
         }
         
         do {
