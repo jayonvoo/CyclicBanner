@@ -22,9 +22,10 @@ class BannerUseScrollViewController: UIViewController {
         setupViews()
         dbDelegate.viewDidLoad()
         print(dbDelegate.getWiFiAddress()!)
+        print(dbDelegate.getDirectoryPath())
+        dbDelegate.checkIfExists()
         addTimer()
-        
-        
+        showToast(message: "Connection Failed")
     }
     /*
      override func viewDidAppear(_ animated: Bool) {
@@ -63,14 +64,14 @@ class BannerUseScrollViewController: UIViewController {
         do {
             /// 只使用3个UIImageView，依次设置好最后一个，第一个，第二个图片，这里面使用取模运算。
             
-            /*
-             for index in 0..<3 {
-             let imageView = UIImageView(frame: CGRect(x: CGFloat(index) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
-             imageView.image = UIImage(named: "pic0\((index + 3) % 3).jpg")
-             
-             scrollView.addSubview(imageView)
-             }
-             */
+            
+            for index in 1..<3 {
+                let imageView = UIImageView(frame: CGRect(x: CGFloat(index) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
+                imageView.image = UIImage(named: "pic0\((index + 3) % 3).jpg")
+                
+                scrollView.addSubview(imageView)
+            }
+            
             let webView = UIWebView(frame: CGRect(x: CGFloat(0) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
             let embedHTML = "<html>" +
                 "<body style='margin:0px;padding:0px;'>" +
@@ -88,19 +89,15 @@ class BannerUseScrollViewController: UIViewController {
                 "   <iframe id='playerId' type='text/html' width='\(kScreenWidth)' height='250' src='http://www.youtube.com/embed/JlGkuFI-lj0?enablejsapi=1&rel=0&playsinline=1&autoplay=1' frameborder='1'>" +
                 "        </body>" +
             "</html>"
-            let imageView = UIImageView(frame: CGRect(x: CGFloat(1) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
-            imageView.image = UIImage(named: "pic00.jpg")
             
             webView.allowsInlineMediaPlayback = true
             webView.mediaPlaybackRequiresUserAction = false
-            self.view.addSubview(webView)
+            view.addSubview(webView)
             //webView.loadHTMLString(embedHTML, baseURL:NSBundle.mainBundle().resourceURL!)
             webView.loadHTMLString(embedHTML, baseURL: Bundle.main.resourceURL)
             automaticallyAdjustsScrollViewInsets = false
             
             scrollView.addSubview(webView)
-            scrollView.addSubview(imageView)
-            
             
         }
         
@@ -194,5 +191,24 @@ extension BannerUseScrollViewController: UIScrollViewDelegate {
         } else {
             nextImage()
         }
+    }
+    
+    func showToast(message : String) {
+        
+        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 75, y: self.view.frame.size.height-100, width: 150, height: 35))
+        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        toastLabel.textColor = UIColor.white
+        toastLabel.textAlignment = .center;
+        toastLabel.font = UIFont(name: "Montserrat-Light", size: 12.0)
+        toastLabel.text = message
+        toastLabel.alpha = 1.0
+        toastLabel.layer.cornerRadius = 10;
+        toastLabel.clipsToBounds  =  true
+        self.view.addSubview(toastLabel)
+        UIView.animate(withDuration: 1, delay: 3, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
     }
 }

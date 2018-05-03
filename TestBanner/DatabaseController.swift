@@ -39,6 +39,33 @@ class DatabaseController: UIViewController{
         print("Database OK")
     }
     
+    func insertData(id: Int, auth: String, address: String, console: String, cycle_time: String){
+        
+        var insertSqlQuery = "insert into IPPlayerDB_ip(id, auth, address, console, cycle_time) values(\(id), '\(auth)', '\(address)', '\(console)', '\(cycle_time)')"
+        
+        if checkIfExists(address: address){
+            
+        }
+        
+    }
+    
+    func checkIfExists(address: String) -> Bool{
+        
+        var returnStmt: OpaquePointer? = nil
+        let checkExists = "select * from IPPlayerDB_ip where address like '\(address)'"
+        
+        sqlite3_prepare(db, checkExists, -1, &returnStmt, nil)
+        
+        if sqlite3_step(returnStmt) == SQLITE_ROW{
+            print("table exists")
+            return true
+        }else{
+            print(sqlite3_step(returnStmt))
+            print("table no exists")
+            return false
+        }
+    }
+    
     func getDirectoryPath() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]
