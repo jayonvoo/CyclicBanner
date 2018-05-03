@@ -72,6 +72,21 @@ class DatabaseController: UIViewController{
         }
     }
     
+    func getDBValue_id(){
+        
+        var returnStmt: OpaquePointer?
+        let sqlQuery = "select id from IPPlayerDB_ip where address = '192.168.0.138'"
+        
+        sqlite3_prepare(db, sqlQuery, -1, &returnStmt, nil)
+        
+        while sqlite3_step(returnStmt) == SQLITE_ROW{
+            let id = sqlite3_column_int(returnStmt, 0)
+            
+            print("id=\(id)")
+        }
+    }
+    
+    
     func getDirectoryPath() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]

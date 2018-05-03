@@ -25,7 +25,9 @@ class BannerUseScrollViewController: UIViewController {
         print(dbDelegate.getDirectoryPath())
         dbDelegate.insertData(auth: "01:00:00", address: dbDelegate.getWiFiAddress()!, console: "huawei", cycle_time: 10)
         addTimer()
-        showToast(message: "Connection Failed")
+        showToast(message: "成功連線")
+        
+        dbDelegate.getDBValue_id()
     }
     /*
      override func viewDidAppear(_ animated: Bool) {
