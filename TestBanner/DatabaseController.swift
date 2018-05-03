@@ -14,7 +14,7 @@ class DatabaseController: UIViewController{
     
     var db: OpaquePointer?
     
-    let createTableQuery_ip = "CREATE TABLE IF NOT EXISTS IPPlayerDB_ip(id INTEGER PRIMARY KEY AUTOINCREMENT, auth TEXT, address TEXT, console TEXT)"
+    let createTableQuery_ip = "CREATE TABLE IF NOT EXISTS IPPlayerDB_ip(id INTEGER PRIMARY KEY AUTOINCREMENT, auth TEXT, address TEXT, console TEXT, cycle_time INTEGER)"
     
     let createTableQuery_data = "CREATE TABLE IF NOT EXISTS IPPlayerDB_data(id INTEGER PRIMARY KEY AUTOINCREMENT, path TEXT, type TEXT, address TEXT)"
     
@@ -39,12 +39,18 @@ class DatabaseController: UIViewController{
         print("Database OK")
     }
     
-    func insertData(id: Int, auth: String, address: String, console: String, cycle_time: String){
+    func insertData(auth: String, address: String, console: String, cycle_time: Int){
         
-        var insertSqlQuery = "insert into IPPlayerDB_ip(id, auth, address, console, cycle_time) values(\(id), '\(auth)', '\(address)', '\(console)', '\(cycle_time)')"
+        let insertSqlQuery = "insert into IPPlayerDB_ip(auth, address, console, cycle_time) values('\(auth)', '\(address)', '\(console)', \(cycle_time))"
+        var returnStmt: OpaquePointer?
         
-        if checkIfExists(address: address){
-            
+        if !checkIfExists(address: address){
+            if sqlite3_prepare(db, insertSqlQuery, -1, &returnStmt, nil) == SQLITE_OK{
+                if sqlite3_step(returnStmt) == SQLITE_DONE{
+                    print("Insert Data Success")
+                }
+            }
+            sqlite3_finalize(returnStmt)
         }
         
     }

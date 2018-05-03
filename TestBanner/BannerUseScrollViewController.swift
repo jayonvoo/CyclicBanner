@@ -23,7 +23,7 @@ class BannerUseScrollViewController: UIViewController {
         dbDelegate.viewDidLoad()
         print(dbDelegate.getWiFiAddress()!)
         print(dbDelegate.getDirectoryPath())
-        dbDelegate.checkIfExists()
+        dbDelegate.insertData(auth: "01:00:00", address: dbDelegate.getWiFiAddress()!, console: "huawei", cycle_time: 10)
         addTimer()
         showToast(message: "Connection Failed")
     }

@@ -25,6 +25,7 @@
 		FC4E5E3B2096F15600D34577 /* pic00.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FC4E5E382096F15500D34577 /* pic00.jpg */; };
 		FC4E5E3C2096F15600D34577 /* pic02.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FC4E5E392096F15600D34577 /* pic02.jpg */; };
 		FC4E5E3E209701F700D34577 /* DatabaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E5E3D209701F700D34577 /* DatabaseController.swift */; };
+		FC9BDC3E209ADF6200F2CADC /* AddDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9BDC3D209ADF6200F2CADC /* AddDataController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		FC4E5E382096F15500D34577 /* pic00.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = pic00.jpg; path = ../../travelingImage/pic00.jpg; sourceTree = "<group>"; };
 		FC4E5E392096F15600D34577 /* pic02.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = pic02.jpg; path = ../../travelingImage/pic02.jpg; sourceTree = "<group>"; };
 		FC4E5E3D209701F700D34577 /* DatabaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseController.swift; sourceTree = "<group>"; };
+		FC9BDC3D209ADF6200F2CADC /* AddDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDataController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 				7BC61F921E0C2ABD0099A345 /* BannerCollectionViewCell.swift */,
 				FC4E5E3D209701F700D34577 /* DatabaseController.swift */,
 				FC0B1A072099B34A00617EF6 /* VideoTesterClass.swift */,
+				FC9BDC3D209ADF6200F2CADC /* AddDataController.swift */,
 				944337DE1E0BA1E00094CF25 /* Main.storyboard */,
 				944337E11E0BA1E00094CF25 /* Assets.xcassets */,
 				944337E31E0BA1E00094CF25 /* LaunchScreen.storyboard */,
@@ -190,6 +193,7 @@
 				944337F11E0BBB9A0094CF25 /* BannerUseCollectionViewController.swift in Sources */,
 				944337ED1E0BB9170094CF25 /* Common.swift in Sources */,
 				FC0B1A082099B34A00617EF6 /* VideoTesterClass.swift in Sources */,
+				FC9BDC3E209ADF6200F2CADC /* AddDataController.swift in Sources */,
 				944337DB1E0BA1E00094CF25 /* AppDelegate.swift in Sources */,
 				944337EF1E0BBAD50094CF25 /* BannerUseScrollViewController.swift in Sources */,
 			);
