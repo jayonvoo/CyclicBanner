@@ -7,12 +7,17 @@
 //
 
 import UIKit
+import SQLite3
 
 class AddDataController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate{
     
     var getUIImage: UIImage? = nil
+    var dbDelegate = DatabaseController()
     
     @IBAction func picButtonOnClick(_ sender: Any) {
+    
+        dbDelegate.saveImageDocumentDirectory(imageName: dbDelegate.getWiFiAddress()! + ".jpg", imageFile: getUIImage!)
+       
         
         photoLibrary()
         

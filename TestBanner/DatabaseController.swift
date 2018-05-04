@@ -39,7 +39,7 @@ class DatabaseController: UIViewController{
         print("Database OK")
     }
     
-    func insertData(auth: String, address: String, console: String, cycle_time: Int){
+    func insertInitialData(auth: String, address: String, console: String, cycle_time: Int){
         
         let insertSqlQuery = "insert into IPPlayerDB_ip(auth, address, console, cycle_time) values('\(auth)', '\(address)', '\(console)', \(cycle_time))"
         var returnStmt: OpaquePointer?
@@ -53,6 +53,10 @@ class DatabaseController: UIViewController{
             sqlite3_finalize(returnStmt)
         }
         
+    }
+    
+    func insertImageOnForeignTable(){
+        let insertSqlQuery = "insert into picture_table where "
     }
     
     func checkIfExists(address: String) -> Bool{
@@ -127,6 +131,32 @@ class DatabaseController: UIViewController{
         freeifaddrs(ifaddr)
         
         return address
+    }
+    
+    func saveImageDocumentDirectory(imageName: String, imageFile: UIImage){
+        let fileManager = FileManager.default
+        let paths = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("\(imageName).jpg")
+        let image = imageFile
+        print(paths)
+        let imageData = UIImageJPEGRepresentation(image, 0.5)
+        fileManager.createFile(atPath: paths as String, contents: imageData, attributes: nil)
+    }
+    
+    func getImage(getImagePath: String) -> UIImage{
+        var getReturnImage: UIImage?
+        let fileManager = FileManager.default
+        var imagePAth = (self.getDirectoryPath() as NSString).appendingPathComponent(getImagePath)
+        
+        if fileManager.fileExists(atPath: imagePAth){
+            //self.imageView.image = UIImage(contentsOfFile: imagePAth)
+            getReturnImage =  UIImage(contentsOfFile: imagePAth)!
+            return getReturnImage!
+        }else{
+            
+            imagePAth = (self.getDirectoryPath() as NSString).appendingPathComponent("0401_empty_Darrel_Austin.jpg")
+            getReturnImage =  UIImage(contentsOfFile: imagePAth)!
+            return getReturnImage!
+        }
     }
     
 }

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AVKit
+import AVFoundation
 
 class BannerUseScrollViewController: UIViewController {
     
@@ -15,7 +17,9 @@ class BannerUseScrollViewController: UIViewController {
     var pageView: UIPageControl!
     var timer: Timer?
     var dbDelegate = DatabaseController()
-    
+    var videoURL = URL(string: "https://jayonweb.000webhostapp.com/CycleBanner_video/%E6%98%A0%E7%94%BB%E3%80%8E%E3%83%8B%E3%83%B3%E3%82%B7%E3%82%99%E3%83%A3%E3%83%8F%E3%82%99%E3%83%83%E3%83%88%E3%83%9E%E3%83%B3%E3%80%8F%20%E6%97%A5%E6%9C%AC%E7%94%A8%E3%83%88%E3%83%AC%E3%83%BC%E3%83%A9%E3%83%BC%E3%80%902018%E5%B9%B46%E6%9C%8815%E6%97%A5%E5%8A%87%E5%A0%B4%E5%85%AC%E9%96%8B%E3%80%91.mp4")
+    var player: AVPlayer?
+    var playerLayer = AVPlayerViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +27,7 @@ class BannerUseScrollViewController: UIViewController {
         dbDelegate.viewDidLoad()
         print(dbDelegate.getWiFiAddress()!)
         print(dbDelegate.getDirectoryPath())
-        dbDelegate.insertData(auth: "01:00:00", address: dbDelegate.getWiFiAddress()!, console: "huawei", cycle_time: 10)
+        dbDelegate.insertInitialData(auth: "01:00:00", address: dbDelegate.getWiFiAddress()!, console: "huawei", cycle_time: 10)
         addTimer()
         showToast(message: "成功連線")
         
@@ -74,7 +78,12 @@ class BannerUseScrollViewController: UIViewController {
                 scrollView.addSubview(imageView)
             }
             
-            let webView = UIWebView(frame: CGRect(x: CGFloat(0) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
+            player = AVPlayer(url: videoURL!)
+            playerLayer.player = player
+            playerLayer.view.frame = CGRect(x: CGFloat(0) * kScreenWidth, y: 0, width: kScreenWidth, height: 250)
+            player?.play()
+            
+            /*let webView = UIWebView(frame: CGRect(x: CGFloat(0) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
             let embedHTML = "<html>" +
                 "<body style='margin:0px;padding:0px;'>" +
                 "<script type='text/javascript' src='http://www.youtube.com/iframe_api'></script>" +
@@ -98,9 +107,9 @@ class BannerUseScrollViewController: UIViewController {
             //webView.loadHTMLString(embedHTML, baseURL:NSBundle.mainBundle().resourceURL!)
             webView.loadHTMLString(embedHTML, baseURL: Bundle.main.resourceURL)
             automaticallyAdjustsScrollViewInsets = false
-            
-            scrollView.addSubview(webView)
-            
+            */
+            scrollView.addSubview(playerLayer.view)
+         
         }
         
         do {
@@ -160,13 +169,13 @@ class BannerUseScrollViewController: UIViewController {
     /// 重新加载图片，重新设置3个imageView
     func reloadImage() {
         let currentIndex = pageView.currentPage
-        let nextIndex = (currentIndex + 1) % 4
-        let preIndex = (currentIndex + 3) % 4
+        let nextIndex = (currentIndex + 1) % 3
+        let preIndex = (currentIndex + 2) % 3
         
         (scrollView.subviews[0] as! UIImageView).image = UIImage(named: "pic0\(preIndex).jpg")
         (scrollView.subviews[1] as! UIImageView).image = UIImage(named: "pic0\(currentIndex).jpg")
-        (scrollView.subviews[2] as! UIImageView).image = UIImage(named: "pic0\(nextIndex).jpg")
-        //  (scrollView.subviews[3] as! UIWebView) = webView
+        //(scrollView.subviews[2] as! UIImageView).image = UIImage(named: "pic0\(nextIndex).jpg")
+        //(scrollView.subviews[2] as! UIView) = playerLayer.view
         
     }
 }
