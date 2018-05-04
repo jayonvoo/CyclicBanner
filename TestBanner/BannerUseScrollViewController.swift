@@ -32,6 +32,9 @@ class BannerUseScrollViewController: UIViewController {
         showToast(message: "成功連線")
         
         dbDelegate.getDBValue_id()
+    
+        print("Ns File location: \(NSTemporaryDirectory())")
+        
     }
     /*
      override func viewDidAppear(_ animated: Bool) {
