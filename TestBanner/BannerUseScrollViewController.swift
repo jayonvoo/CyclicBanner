@@ -33,7 +33,6 @@ class BannerUseScrollViewController: UIViewController {
         
         dbDelegate.getDBValue_id()
     
-        print("Ns File location: \(NSTemporaryDirectory())")
         
     }
     /*
@@ -74,16 +73,18 @@ class BannerUseScrollViewController: UIViewController {
             /// 只使用3个UIImageView，依次设置好最后一个，第一个，第二个图片，这里面使用取模运算。
             
             
-            for index in 1..<3 {
+            for index in 0..<2 {
                 let imageView = UIImageView(frame: CGRect(x: CGFloat(index) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
                 imageView.image = UIImage(named: "pic0\((index + 3) % 3).jpg")
                 
                 scrollView.addSubview(imageView)
+                
+                print(scrollView.subviews[index])
             }
             
             player = AVPlayer(url: videoURL!)
             playerLayer.player = player
-            playerLayer.view.frame = CGRect(x: CGFloat(0) * kScreenWidth, y: 0, width: kScreenWidth, height: 250)
+            playerLayer.view.frame = CGRect(x: CGFloat(2) * kScreenWidth, y: 0, width: kScreenWidth, height: 250)
             player?.play()
             
             /*let webView = UIWebView(frame: CGRect(x: CGFloat(0) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
@@ -112,7 +113,9 @@ class BannerUseScrollViewController: UIViewController {
             automaticallyAdjustsScrollViewInsets = false
             */
             scrollView.addSubview(playerLayer.view)
-         
+            
+            print(scrollView.subviews[2])
+            print(type(of: (scrollView.subviews[2])))
         }
         
         do {
@@ -177,6 +180,7 @@ class BannerUseScrollViewController: UIViewController {
         
         (scrollView.subviews[0] as! UIImageView).image = UIImage(named: "pic0\(preIndex).jpg")
         (scrollView.subviews[1] as! UIImageView).image = UIImage(named: "pic0\(currentIndex).jpg")
+        //(scrollView.subviews[2])
         //(scrollView.subviews[2] as! UIImageView).image = UIImage(named: "pic0\(nextIndex).jpg")
         //(scrollView.subviews[2] as! UIView) = playerLayer.view
         

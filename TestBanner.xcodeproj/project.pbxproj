@@ -98,8 +98,8 @@
 				FC4E5E3D209701F700D34577 /* DatabaseController.swift */,
 				FC0B1A072099B34A00617EF6 /* VideoTesterClass.swift */,
 				FC9BDC3D209ADF6200F2CADC /* AddDataController.swift */,
-				944337DE1E0BA1E00094CF25 /* Main.storyboard */,
 				944337E11E0BA1E00094CF25 /* Assets.xcassets */,
+				944337DE1E0BA1E00094CF25 /* Main.storyboard */,
 				944337E31E0BA1E00094CF25 /* LaunchScreen.storyboard */,
 				944337E61E0BA1E00094CF25 /* Info.plist */,
 			);

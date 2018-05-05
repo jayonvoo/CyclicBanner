@@ -8,6 +8,7 @@
 
 import UIKit
 import SQLite3
+import AVKit
 
 class AddDataController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate{
     
@@ -15,21 +16,18 @@ class AddDataController: UIViewController, UIImagePickerControllerDelegate & UIN
     var dbDelegate = DatabaseController()
     
     @IBAction func picButtonOnClick(_ sender: Any) {
-    
-        dbDelegate.saveImageDocumentDirectory(imageName: dbDelegate.getWiFiAddress()! + ".jpg", imageFile: getUIImage!)
-       
+        
+        //dbDelegate.saveImageDocumentDirectory(imageName: dbDelegate.getWiFiAddress()! + ".jpg", imageFile: getUIImage!)
         
         photoLibrary()
         
     }
     @IBAction func submitOnCLick(_ sender: UIButton) {
-
         
+        //   dbDelegate.saveImageDocumentDirectory(imageName: <#T##String#>, imageFile: <#T##UIImage#>)
         
         self.navigationController?.popViewController(animated: true)
     }
-    
-    
     
     func photoLibrary()
     {
@@ -43,10 +41,22 @@ class AddDataController: UIViewController, UIImagePickerControllerDelegate & UIN
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            
-            self.getUIImage = image
+        
+        
+        let videoURL = info[UIImagePickerControllerMediaURL] as? URL
+        let compatible: Bool = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum((videoURL?.path)!)
+        
+        if compatible{
+            UISaveVideoAtPathToSavedPhotosAlbum((videoURL?.path)!, self, nil, nil)
+            print("video_path: \(videoURL?.path as Any)")
         }
+        
+        //self.getUIImage = image
+        let videoPlayer = AVPlayer(url: videoURL!)
+        videoPlayer.actionAtItemEnd = .none
+        let videoLayer = AVPlayerLayer(player: videoPlayer)
+        videoLayer.frame = CGRect(x: CGFloat(0) * kScreenWidth, y: 0, width: kScreenWidth, height: 250)
+        
         
         picker.dismiss(animated: true, completion: nil);
     }

@@ -56,7 +56,7 @@ class DatabaseController: UIViewController{
     }
     
     func insertImageOnForeignTable(){
-        let insertSqlQuery = "insert into picture_table where "
+        let insertSqlQuery = "insert into picture_table where"
     }
     
     func checkIfExists(address: String) -> Bool{
@@ -92,10 +92,13 @@ class DatabaseController: UIViewController{
     
     
     func getDirectoryPath() -> String {
+        
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]
+        
         return documentsDirectory
     }
+    
     
     //取得本機的ip_add
     func getWiFiAddress() -> String? {
@@ -135,12 +138,21 @@ class DatabaseController: UIViewController{
     
     func saveImageDocumentDirectory(imageName: String, imageFile: UIImage){
         let fileManager = FileManager.default
-        let paths = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("\(imageName).jpg")
+        let paths = (NSSearchPathForDirectoriesInDomains(.applicationDirectory, .systemDomainMask, true)[0] + "MAMP/htdocs/" as NSString).appendingPathComponent("\(imageName).mp4")
         let image = imageFile
         print(paths)
         let imageData = UIImageJPEGRepresentation(image, 0.5)
         fileManager.createFile(atPath: paths as String, contents: imageData, attributes: nil)
     }
+    /*
+    func saveVideoDocumentDirectory(){
+        let fileManager = FileManager.default
+        let paths = (NSSearchPathForDirectoriesInDomains(.applicationDirectory, .systemDomainMask, true)[0] + "MAMP/htdocs/" as NSString).appendingPathComponent("\(imageName).mp4")
+        let image = imageFile
+        print(paths)
+        let imageData = UIImageJPEGRepresentation(image, 0.5)
+        fileManager.createFile(atPath: paths as String, contents: imageData, attributes: nil)
+    }*/
     
     func getImage(getImagePath: String) -> UIImage{
         var getReturnImage: UIImage?
