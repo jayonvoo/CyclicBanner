@@ -65,7 +65,7 @@ class BannerUseScrollViewController: UIViewController {
                 if getFileExt(path: getPathArray[index]) == "mp4"{
                     var player: AVPlayer?
                     let playerLayer = AVPlayerViewController()
-                    player = AVPlayer(url: URL(string: "https://www.w3schools.com/html/mov_bbb.mp4"/*getPathArray[index])!*/)!)
+                    player = AVPlayer(url: URL(string: getPathArray[index])!))
                     playerLayer.player = player
                     playerLayer.view.frame = CGRect(x: CGFloat(index) * kScreenWidth, y: 0, width: kScreenWidth, height: 250)
                     player?.pause()
