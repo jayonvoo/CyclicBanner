@@ -85,7 +85,6 @@ class DatabaseController: UIViewController{
         
         while sqlite3_step(returnStmt) == SQLITE_ROW{
             let id = sqlite3_column_int(returnStmt, 0)
-            
             print("id=\(id)")
         }
     }

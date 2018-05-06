@@ -33,6 +33,8 @@ class BannerUseScrollViewController: UIViewController {
         
         dbDelegate.getDBValue_id()
         
+        print("Time interval: \(parseDuration(timeString: "01:00:00"))")
+        
     }
     /*
      override func viewDidAppear(_ animated: Bool) {
@@ -159,44 +161,25 @@ class BannerUseScrollViewController: UIViewController {
         scrollView.setContentOffset(contentOffset, animated: true)
     }
     
-    /// 重新加载图片，重新设置3个imageView
-    func reloadImage() {
-        let currentIndex = pageView.currentPage
-        let nextIndex = (currentIndex + 1) % 3
-        let preIndex = (currentIndex + 2) % 3
-        
-        (scrollView.subviews[0] as! UIImageView).image = UIImage(named: "pic0\(preIndex).jpg")
-        (scrollView.subviews[1] as! UIImageView).image = UIImage(named: "pic0\(currentIndex).jpg")
-        // (scrollView.subviews[2]).sub
-        //(scrollView.subviews[2] as! UIImageView).image = UIImage(named: "pic0\(nextIndex).jpg")
-        //(scrollView.subviews[2] as! UIView) = playerLayer.view
-        
+}
+
+//時間轉秒器
+func parseDuration(timeString: String) -> TimeInterval {
+    guard !timeString.isEmpty else {
+        return 0
     }
+    
+    var interval:Double = 0
+    
+    let parts = timeString.components(separatedBy: ":")
+    for (index, part) in parts.reversed().enumerated() {
+        interval += (Double(part) ?? 0) * pow(Double(60), Double(index))
+    }
+    
+    return interval
 }
 
 extension BannerUseScrollViewController: UIScrollViewDelegate {
-    
-    /// 开始滑动的时候，停止timer，设置为niltimer才会销毁
-    /*func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        removeTimer()
-    }*/
-    
-    /// 当停止滚动的时候重新设置三个ImageView的内容，然后悄悄滴显示中间那个imageView
-    /* func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-     reloadImage()
-     scrollView.setContentOffset(CGPoint(x: kScreenWidth, y: 0), animated: false)
-     } */
-    
-    /// 停止拖拽，开始timer, 并且判断是显示上一个图片还是下一个图片
-    /*func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        addTimer()
-        
-        if scrollView.contentOffset.x < kScreenWidth {
-            preImage()
-        } else {
-            nextImage()
-        }
-    }*/
     
     func showToast(message : String) {
         
