@@ -101,6 +101,7 @@ class BannerUseScrollViewController: UIViewController {
         }
         
         let contentOffset = CGPoint(x: 0, y: 0)
+        scrollView.contentOffset = contentOffset
         scrollView.setContentOffset(contentOffset, animated: true)
     }
     
@@ -111,7 +112,7 @@ class BannerUseScrollViewController: UIViewController {
         //            self?.nextImage()
         //        })
         
-        timer = Timer(timeInterval: 10, repeats: true, block: { [weak self] _ in
+        timer = Timer(timeInterval: 5, repeats: true, block: { [weak self] _ in
             self?.nextImage()
         })
         
@@ -142,7 +143,6 @@ class BannerUseScrollViewController: UIViewController {
             let contentOffset = CGPoint(x: kScreenWidth * getPage, y: 0)
             scrollView.setContentOffset(contentOffset, animated: true)
         }
-        
     }
     
     /// 上一个图片
@@ -177,9 +177,9 @@ class BannerUseScrollViewController: UIViewController {
 extension BannerUseScrollViewController: UIScrollViewDelegate {
     
     /// 开始滑动的时候，停止timer，设置为niltimer才会销毁
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    /*func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         removeTimer()
-    }
+    }*/
     
     /// 当停止滚动的时候重新设置三个ImageView的内容，然后悄悄滴显示中间那个imageView
     /* func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
@@ -188,21 +188,15 @@ extension BannerUseScrollViewController: UIScrollViewDelegate {
      } */
     
     /// 停止拖拽，开始timer, 并且判断是显示上一个图片还是下一个图片
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    /*func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         addTimer()
         
         if scrollView.contentOffset.x < kScreenWidth {
-            print(scrollView.contentOffset.x)
-            print(kScreenWidth)
-            
             preImage()
         } else {
-            
-            print(scrollView.contentOffset.x)
-            print(kScreenWidth)
             nextImage()
         }
-    }
+    }*/
     
     func showToast(message : String) {
         
