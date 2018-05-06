@@ -13,6 +13,7 @@ import SQLite3
 class DatabaseController: UIViewController{
     
     var db: OpaquePointer?
+    var pathArray = [String]()
     
     let createTableQuery_ip = "CREATE TABLE IF NOT EXISTS IPPlayerDB_ip(id INTEGER PRIMARY KEY AUTOINCREMENT, auth TEXT, address TEXT, console TEXT, cycle_time INTEGER)"
     
@@ -55,10 +56,7 @@ class DatabaseController: UIViewController{
         
     }
     
-    func insertImageOnForeignTable(){
-        let insertSqlQuery = "insert into picture_table where"
-    }
-    
+
     func checkIfExists(address: String) -> Bool{
         
         var returnStmt: OpaquePointer? = nil
@@ -76,17 +74,20 @@ class DatabaseController: UIViewController{
         }
     }
     
-    func getDBValue_id(){
+    func getDBValue_address(ip_address: String) -> [String]{
         
         var returnStmt: OpaquePointer?
-        let sqlQuery = "select id from IPPlayerDB_ip where address = '192.168.0.138'"
-        
+        //let sqlQuery = "select path from IPPlayerDB_data where address = '192.168.0.138'"
+        let sqlQuery = "select * from IPPlayerDB_data where address = '192.168.0.138'"
         sqlite3_prepare(db, sqlQuery, -1, &returnStmt, nil)
         
         while sqlite3_step(returnStmt) == SQLITE_ROW{
-            let id = sqlite3_column_int(returnStmt, 0)
-            print("id=\(id)")
+            let address = sqlite3_column_text(returnStmt, 1)
+            let text = String(cString: address!)
+            print(text)
+            pathArray.append(text)
         }
+        return pathArray
     }
     
     

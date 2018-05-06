@@ -12,29 +12,31 @@ import AVFoundation
 
 class BannerUseScrollViewController: UIViewController {
     
-    let imageCount = 3
+    var imageCount: Int?
     var scrollView: UIScrollView!
     var pageView: UIPageControl!
     var timer: Timer?
     var dbDelegate = DatabaseController()
-    var videoURL = URL(string: "https://jayonweb.000webhostapp.com/CycleBanner_video/%E6%98%A0%E7%94%BB%E3%80%8E%E3%83%8B%E3%83%B3%E3%82%B7%E3%82%99%E3%83%A3%E3%83%8F%E3%82%99%E3%83%83%E3%83%88%E3%83%9E%E3%83%B3%E3%80%8F%20%E6%97%A5%E6%9C%AC%E7%94%A8%E3%83%88%E3%83%AC%E3%83%BC%E3%83%A9%E3%83%BC%E3%80%902018%E5%B9%B46%E6%9C%8815%E6%97%A5%E5%8A%87%E5%A0%B4%E5%85%AC%E9%96%8B%E3%80%91.mp4")
     var player: AVPlayer?
     var playerLayer = AVPlayerViewController()
+    var getPathArray = [String]()
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
-        setupViews()
+        
         dbDelegate.viewDidLoad()
-        print(dbDelegate.getWiFiAddress()!)
-        print(dbDelegate.getDirectoryPath())
+        
         dbDelegate.insertInitialData(auth: "01:00:00", address: dbDelegate.getWiFiAddress()!, console: "huawei", cycle_time: 10)
-        addTimer()
+        getPathArray = dbDelegate.getDBValue_address(ip_address: dbDelegate.getWiFiAddress()!)
         showToast(message: "成功連線")
         
-        dbDelegate.getDBValue_id()
-        
         print("Time interval: \(parseDuration(timeString: "01:00:00"))")
+        print(dbDelegate.getWiFiAddress()!)
+        print(dbDelegate.getDirectoryPath())
         
+        setupViews()
+        addTimer()
     }
     /*
      override func viewDidAppear(_ animated: Bool) {
@@ -63,8 +65,8 @@ class BannerUseScrollViewController: UIViewController {
         
         do {
             pageView = UIPageControl(frame: CGRect(x: 0, y: kScreenHeight - 30, width: kScreenWidth, height: 30))
-            //  view.addSubview(pageView)
-            pageView.numberOfPages = imageCount
+            view.addSubview(pageView)
+            pageView.numberOfPages = getPathArray.count
             pageView.currentPage = 0
             //pageView.pageIndicatorTintColor = UIColor.white
             //pageView.currentPageIndicatorTintColor = UIColor.blue
@@ -74,24 +76,33 @@ class BannerUseScrollViewController: UIViewController {
             /// 只使用3个UIImageView，依次设置好最后一个，第一个，第二个图片，这里面使用取模运算。
             
             
-            for index in 0..<2 {
-                let imageView = UIImageView(frame: CGRect(x: CGFloat(index) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
-                imageView.image = UIImage(named: "pic0\((index + 3) % 3).jpg")
+            for index in 0..<getPathArray.count {
                 
-                scrollView.addSubview(imageView)
-                
-                print(scrollView.subviews[index])
+                if getFileExt(path: getPathArray[index]) == "mp4"{
+                    
+                    player = AVPlayer(url: URL(string: getPathArray[index])!)
+                    playerLayer.player = player
+                    playerLayer.view.frame = CGRect(x: CGFloat(index) * kScreenWidth, y: 0, width: kScreenWidth, height: 250)
+                    player?.play()
+                    
+                    scrollView.addSubview(playerLayer.view)
+                    
+                }else{
+                    
+                    let imageView = UIImageView(frame: CGRect(x: CGFloat(index) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
+                    
+                    let url = URL(string: getPathArray[index])
+                    if let data = try? Data(contentsOf: url!)
+                    {
+                        let image: UIImage = UIImage(data: data)!
+                        
+                        imageView.image = image
+                        
+                        scrollView.addSubview(imageView)
+                    }
+                    
+                }
             }
-            
-            player = AVPlayer(url: videoURL!)
-            playerLayer.player = player
-            playerLayer.view.frame = CGRect(x: CGFloat(2) * kScreenWidth, y: 0, width: kScreenWidth, height: 250)
-            player?.play()
-            
-            scrollView.addSubview(playerLayer.view)
-            
-            print(scrollView.subviews[2])
-            print(type(of: playerLayer.view))
         }
         
         do {
@@ -108,6 +119,7 @@ class BannerUseScrollViewController: UIViewController {
     }
     
     /// 添加timer
+    
     func addTimer() {
         /// 利用这种方式添加的timer 如果有列表滑动的话不会调用这个timer，因为当前runloop的mode更换了
         //        timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block: { [weak self] (timer) in
@@ -130,9 +142,10 @@ class BannerUseScrollViewController: UIViewController {
     }
     
     /// 下一个图片
+    
     func nextImage() {
         print("next_image: \(pageView.currentPage)")
-        if pageView.currentPage == imageCount - 1 {
+        if pageView.currentPage == getPathArray.count - 1 {
             pageView.currentPage = 0
             
             let contentOffset = CGPoint(x: 0, y: 0)
@@ -148,19 +161,20 @@ class BannerUseScrollViewController: UIViewController {
     }
     
     /// 上一个图片
-    func preImage() {
-        print("prev_image: \(pageView.currentPage)")
-        if pageView.currentPage == 0 {
-            pageView.currentPage = imageCount - 1
-        } else {
-            pageView.currentPage -= 1
-        }
-        
-        let contentOffset = CGPoint(x: 0, y: 0)
-        scrollView.contentOffset = contentOffset
-        scrollView.setContentOffset(contentOffset, animated: true)
-    }
-    
+    /*
+     func preImage() {
+     print("prev_image: \(pageView.currentPage)")
+     if pageView.currentPage == 0 {
+     pageView.currentPage = imageCount - 1
+     } else {
+     pageView.currentPage -= 1
+     }
+     
+     let contentOffset = CGPoint(x: 0, y: 0)
+     scrollView.contentOffset = contentOffset
+     scrollView.setContentOffset(contentOffset, animated: true)
+     }
+     */
 }
 
 //時間轉秒器
@@ -177,6 +191,15 @@ func parseDuration(timeString: String) -> TimeInterval {
     }
     
     return interval
+}
+
+func getFileExt(path: String) -> String{
+    
+    let filename: NSString = path as NSString
+    let pathExtention = filename.pathExtension
+    //let pathPrefix = filename.deletingPathExtension
+    
+    return pathExtention
 }
 
 extension BannerUseScrollViewController: UIScrollViewDelegate {
