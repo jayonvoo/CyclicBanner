@@ -32,7 +32,6 @@ class BannerUseScrollViewController: UIViewController {
         showToast(message: "成功連線")
         
         dbDelegate.getDBValue_id()
-    
         
     }
     /*
@@ -87,35 +86,10 @@ class BannerUseScrollViewController: UIViewController {
             playerLayer.view.frame = CGRect(x: CGFloat(2) * kScreenWidth, y: 0, width: kScreenWidth, height: 250)
             player?.play()
             
-            /*let webView = UIWebView(frame: CGRect(x: CGFloat(0) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
-            let embedHTML = "<html>" +
-                "<body style='margin:0px;padding:0px;'>" +
-                "<script type='text/javascript' src='http://www.youtube.com/iframe_api'></script>" +
-                "<script type='text/javascript'>" +
-                "function onYouTubeIframeAPIReady()" +
-                "{" +
-                "    ytplayer=new YT.Player('playerId',{events:{onReady:onPlayerReady}})" +
-                "}" +
-                "function onPlayerReady(a)" +
-                "{ " +
-                "   a.target.playVideo(); " +
-                "}" +
-                "</script>" +
-                "   <iframe id='playerId' type='text/html' width='\(kScreenWidth)' height='250' src='http://www.youtube.com/embed/JlGkuFI-lj0?enablejsapi=1&rel=0&playsinline=1&autoplay=1' frameborder='1'>" +
-                "        </body>" +
-            "</html>"
-            
-            webView.allowsInlineMediaPlayback = true
-            webView.mediaPlaybackRequiresUserAction = false
-            view.addSubview(webView)
-            //webView.loadHTMLString(embedHTML, baseURL:NSBundle.mainBundle().resourceURL!)
-            webView.loadHTMLString(embedHTML, baseURL: Bundle.main.resourceURL)
-            automaticallyAdjustsScrollViewInsets = false
-            */
             scrollView.addSubview(playerLayer.view)
             
             print(scrollView.subviews[2])
-            print(type(of: (scrollView.subviews[2])))
+            print(type(of: playerLayer.view))
         }
         
         do {
@@ -125,6 +99,9 @@ class BannerUseScrollViewController: UIViewController {
             scrollView.showsHorizontalScrollIndicator = false
             scrollView.showsVerticalScrollIndicator = false
         }
+        
+        let contentOffset = CGPoint(x: 0, y: 0)
+        scrollView.setContentOffset(contentOffset, animated: true)
     }
     
     /// 添加timer
@@ -151,17 +128,26 @@ class BannerUseScrollViewController: UIViewController {
     
     /// 下一个图片
     func nextImage() {
+        print("next_image: \(pageView.currentPage)")
         if pageView.currentPage == imageCount - 1 {
             pageView.currentPage = 0
+            
+            let contentOffset = CGPoint(x: 0, y: 0)
+            scrollView.setContentOffset(contentOffset, animated: true)
         } else {
             pageView.currentPage += 1
+            
+            let getPage = CGFloat(pageView.currentPage)
+            
+            let contentOffset = CGPoint(x: kScreenWidth * getPage, y: 0)
+            scrollView.setContentOffset(contentOffset, animated: true)
         }
-        let contentOffset = CGPoint(x: kScreenWidth * 2, y: 0)
-        scrollView.setContentOffset(contentOffset, animated: true)
+        
     }
     
     /// 上一个图片
     func preImage() {
+        print("prev_image: \(pageView.currentPage)")
         if pageView.currentPage == 0 {
             pageView.currentPage = imageCount - 1
         } else {
@@ -169,6 +155,7 @@ class BannerUseScrollViewController: UIViewController {
         }
         
         let contentOffset = CGPoint(x: 0, y: 0)
+        scrollView.contentOffset = contentOffset
         scrollView.setContentOffset(contentOffset, animated: true)
     }
     
@@ -180,7 +167,7 @@ class BannerUseScrollViewController: UIViewController {
         
         (scrollView.subviews[0] as! UIImageView).image = UIImage(named: "pic0\(preIndex).jpg")
         (scrollView.subviews[1] as! UIImageView).image = UIImage(named: "pic0\(currentIndex).jpg")
-        //(scrollView.subviews[2])
+        // (scrollView.subviews[2]).sub
         //(scrollView.subviews[2] as! UIImageView).image = UIImage(named: "pic0\(nextIndex).jpg")
         //(scrollView.subviews[2] as! UIView) = playerLayer.view
         
@@ -198,15 +185,21 @@ extension BannerUseScrollViewController: UIScrollViewDelegate {
     /* func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
      reloadImage()
      scrollView.setContentOffset(CGPoint(x: kScreenWidth, y: 0), animated: false)
-     }*/
+     } */
     
     /// 停止拖拽，开始timer, 并且判断是显示上一个图片还是下一个图片
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         addTimer()
         
         if scrollView.contentOffset.x < kScreenWidth {
+            print(scrollView.contentOffset.x)
+            print(kScreenWidth)
+            
             preImage()
         } else {
+            
+            print(scrollView.contentOffset.x)
+            print(kScreenWidth)
             nextImage()
         }
     }

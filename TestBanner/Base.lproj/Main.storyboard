@@ -143,34 +143,6 @@
             </objects>
             <point key="canvasLocation" x="2504.8000000000002" y="-491.60419790104953"/>
         </scene>
-        <!--Video Tester Class-->
-        <scene sceneID="QVs-gj-1Fi">
-            <objects>
-                <viewController id="Slj-nn-YpH" customClass="VideoTesterClass" customModule="TestBanner" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ulb-Hs-dCK"/>
-                        <viewControllerLayoutGuide type="bottom" id="AQ3-Mo-kht"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="dSc-lL-mXW">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pbP-8j-DtS">
-                                <rect key="frame" x="67" y="80" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </webView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </view>
-                    <connections>
-                        <outlet property="myWebView" destination="pbP-8j-DtS" id="gMD-F2-xty"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hIR-sY-VUA" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1598" y="-1288"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="034-Tv-zrO">
             <objects>
