@@ -56,7 +56,7 @@ class DatabaseController: UIViewController{
         
     }
     
-
+    
     func checkIfExists(address: String) -> Bool{
         
         var returnStmt: OpaquePointer? = nil
@@ -77,8 +77,8 @@ class DatabaseController: UIViewController{
     func getDBValue_address(ip_address: String) -> [String]{
         
         var returnStmt: OpaquePointer?
-        //let sqlQuery = "select path from IPPlayerDB_data where address = '192.168.0.138'"
         let sqlQuery = "select * from IPPlayerDB_data where address = '192.168.0.138'"
+        //let sqlQuery = "select * from IPPlayerDB_data where address = '\(ip_address)'"
         sqlite3_prepare(db, sqlQuery, -1, &returnStmt, nil)
         
         while sqlite3_step(returnStmt) == SQLITE_ROW{
@@ -135,40 +135,4 @@ class DatabaseController: UIViewController{
         
         return address
     }
-    
-    func saveImageDocumentDirectory(imageName: String, imageFile: UIImage){
-        let fileManager = FileManager.default
-        let paths = (NSSearchPathForDirectoriesInDomains(.applicationDirectory, .systemDomainMask, true)[0] + "MAMP/htdocs/" as NSString).appendingPathComponent("\(imageName).mp4")
-        let image = imageFile
-        print(paths)
-        let imageData = UIImageJPEGRepresentation(image, 0.5)
-        fileManager.createFile(atPath: paths as String, contents: imageData, attributes: nil)
-    }
-    /*
-    func saveVideoDocumentDirectory(){
-        let fileManager = FileManager.default
-        let paths = (NSSearchPathForDirectoriesInDomains(.applicationDirectory, .systemDomainMask, true)[0] + "MAMP/htdocs/" as NSString).appendingPathComponent("\(imageName).mp4")
-        let image = imageFile
-        print(paths)
-        let imageData = UIImageJPEGRepresentation(image, 0.5)
-        fileManager.createFile(atPath: paths as String, contents: imageData, attributes: nil)
-    }*/
-    
-    func getImage(getImagePath: String) -> UIImage{
-        var getReturnImage: UIImage?
-        let fileManager = FileManager.default
-        var imagePAth = (self.getDirectoryPath() as NSString).appendingPathComponent(getImagePath)
-        
-        if fileManager.fileExists(atPath: imagePAth){
-            //self.imageView.image = UIImage(contentsOfFile: imagePAth)
-            getReturnImage =  UIImage(contentsOfFile: imagePAth)!
-            return getReturnImage!
-        }else{
-            
-            imagePAth = (self.getDirectoryPath() as NSString).appendingPathComponent("0401_empty_Darrel_Austin.jpg")
-            getReturnImage =  UIImage(contentsOfFile: imagePAth)!
-            return getReturnImage!
-        }
-    }
-    
 }

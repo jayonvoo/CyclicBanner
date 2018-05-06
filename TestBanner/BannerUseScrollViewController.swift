@@ -17,9 +17,9 @@ class BannerUseScrollViewController: UIViewController {
     var pageView: UIPageControl!
     var timer: Timer?
     var dbDelegate = DatabaseController()
-    var player: AVPlayer?
-    var playerLayer = AVPlayerViewController()
     var getPathArray = [String]()
+    var linkPlayer = [Int : AVPlayer]()
+    var passPageView: Int?
     
     override func viewDidLoad() {
         
@@ -38,23 +38,7 @@ class BannerUseScrollViewController: UIViewController {
         setupViews()
         addTimer()
     }
-    /*
-     override func viewDidAppear(_ animated: Bool) {
-     let alertController = UIAlertController(title: "Enter Ip", message: "", preferredStyle: .alert)
-     
-     alertController.addTextField(configurationHandler:{(textField) in
-     textField.placeholder = "ip address"
-     })
-     
-     let okAction = UIAlertAction(title: "確定", style: .default, handler:{
-     (alert) -> Void in
-     })
-     
-     alertController.addAction(okAction)
-     
-     present(alertController, animated: true, completion: nil)
-     }
-     */
+    
     func setupViews() {
         
         do {
@@ -79,14 +63,16 @@ class BannerUseScrollViewController: UIViewController {
             for index in 0..<getPathArray.count {
                 
                 if getFileExt(path: getPathArray[index]) == "mp4"{
-                    
-                    player = AVPlayer(url: URL(string: getPathArray[index])!)
+                    var player: AVPlayer?
+                    let playerLayer = AVPlayerViewController()
+                    player = AVPlayer(url: URL(string: "https://www.w3schools.com/html/mov_bbb.mp4"/*getPathArray[index])!*/)!)
                     playerLayer.player = player
                     playerLayer.view.frame = CGRect(x: CGFloat(index) * kScreenWidth, y: 0, width: kScreenWidth, height: 250)
-                    player?.play()
+                    player?.pause()
+                    linkPlayer[index] = player
                     
                     scrollView.addSubview(playerLayer.view)
-                    
+                    playerLayer.didMove(toParentViewController: self)
                 }else{
                     
                     let imageView = UIImageView(frame: CGRect(x: CGFloat(index) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
@@ -121,11 +107,6 @@ class BannerUseScrollViewController: UIViewController {
     /// 添加timer
     
     func addTimer() {
-        /// 利用这种方式添加的timer 如果有列表滑动的话不会调用这个timer，因为当前runloop的mode更换了
-        //        timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block: { [weak self] (timer) in
-        //            self?.nextImage()
-        //        })
-        
         timer = Timer(timeInterval: 5, repeats: true, block: { [weak self] _ in
             self?.nextImage()
         })
@@ -150,6 +131,22 @@ class BannerUseScrollViewController: UIViewController {
             
             let contentOffset = CGPoint(x: 0, y: 0)
             scrollView.setContentOffset(contentOffset, animated: true)
+            
+            if type(of: scrollView.subviews[pageView.currentPage]) != type(of: UIImageView()){
+                
+                linkPlayer[pageView.currentPage]?.play()
+                removeTimer()
+                
+                //NotificationCenter.default.addObserver(self, selector: Selector(("playerDidFinishPlaying:")),name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: linkPlayer[pageView.currentPage]?.currentItem)
+                
+                NotificationCenter.default.addObserver(self, selector:#selector(playerDidFinishPlaying(note:)),name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: linkPlayer[pageView.currentPage]?.currentItem)
+                
+                linkPlayer[pageView.currentPage]?.seek(to: kCMTimeZero)
+            } else {
+                addTimer()
+            }
+            
+            
         } else {
             pageView.currentPage += 1
             
@@ -157,9 +154,30 @@ class BannerUseScrollViewController: UIViewController {
             
             let contentOffset = CGPoint(x: kScreenWidth * getPage, y: 0)
             scrollView.setContentOffset(contentOffset, animated: true)
+            
+            if type(of: scrollView.subviews[pageView.currentPage]) != type(of: UIImageView()){
+                
+                linkPlayer[pageView.currentPage]?.play()
+                removeTimer()
+                
+                NotificationCenter.default.addObserver(self, selector:#selector(playerDidFinishPlaying(note:)),name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: linkPlayer[pageView.currentPage]?.currentItem)
+            }else {
+                addTimer()
+                
+                
+            }
         }
     }
     
+    @objc func playerDidFinishPlaying(note: NSNotification) {
+        print("Video Finished")
+        
+        NotificationCenter.default.removeObserver(self)
+        
+        linkPlayer[pageView.currentPage]?.seek(to: kCMTimeZero)
+        linkPlayer[pageView.currentPage]?.pause()
+        nextImage()
+    }
     /// 上一个图片
     /*
      func preImage() {
