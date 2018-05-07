@@ -77,19 +77,31 @@ class DatabaseController: UIViewController{
     func getDBValue_address(ip_address: String) -> [String]{
         
         var returnStmt: OpaquePointer?
-        let sqlQuery = "select * from IPPlayerDB_data where address = '192.168.0.138'"
-        //let sqlQuery = "select * from IPPlayerDB_data where address = '\(ip_address)'"
+        //let sqlQuery = "select * from IPPlayerDB_data where address = '192.168.0.138'"
+        let sqlQuery = "select * from IPPlayerDB_data where address = '\(ip_address)'"
         sqlite3_prepare(db, sqlQuery, -1, &returnStmt, nil)
         
         while sqlite3_step(returnStmt) == SQLITE_ROW{
             let address = sqlite3_column_text(returnStmt, 1)
             let text = String(cString: address!)
-            print(text)
             pathArray.append(text)
         }
         return pathArray
     }
     
+    func getDBValue_auth(ip_address: String) -> String{
+        
+        var text: String?
+        var returnStmt: OpaquePointer?
+        let sqlQuery = "select * from IPPlayerDB_ip where address = '\(ip_address)'"
+        sqlite3_prepare(db, sqlQuery, -1, &returnStmt, nil)
+        
+        while sqlite3_step(returnStmt) == SQLITE_ROW{
+            let authText = sqlite3_column_text(returnStmt, 1)
+            text = String(cString: authText!)
+        }
+        return text!
+    }
     
     func getDirectoryPath() -> String {
         

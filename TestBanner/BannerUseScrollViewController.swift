@@ -12,14 +12,16 @@ import AVFoundation
 
 class BannerUseScrollViewController: UIViewController {
     
-    var imageCount: Int?
+    var fixedTimer: Int?
+    var getTimeCountDown: Int?
     var scrollView: UIScrollView!
     var pageView: UIPageControl!
     var timer: Timer?
+    var countDown: Timer?
     var dbDelegate = DatabaseController()
     var getPathArray = [String]()
+    var getTimeAuth: String?
     var linkPlayer = [Int : AVPlayer]()
-    var passPageView: Int?
     
     override func viewDidLoad() {
         
@@ -29,14 +31,17 @@ class BannerUseScrollViewController: UIViewController {
         
         dbDelegate.insertInitialData(auth: "01:00:00", address: dbDelegate.getWiFiAddress()!, console: "huawei", cycle_time: 10)
         getPathArray = dbDelegate.getDBValue_address(ip_address: dbDelegate.getWiFiAddress()!)
+        getTimeAuth = dbDelegate.getDBValue_auth(ip_address: dbDelegate.getWiFiAddress()!)
         showToast(message: "成功連線")
+        fixedTimer = parseDuration(timeString: dbDelegate.getDBValue_auth(ip_address: dbDelegate.getWiFiAddress()!))
+        getTimeCountDown = fixedTimer
         
-        print("Time interval: \(parseDuration(timeString: "01:00:00"))")
         print(dbDelegate.getWiFiAddress()!)
         print(dbDelegate.getDirectoryPath())
         
         setupViews()
         addTimer()
+        countDownTimerInit()
     }
     
     func setupViews() {
@@ -122,6 +127,17 @@ class BannerUseScrollViewController: UIViewController {
         timer = nil
     }
     
+    func countDownTimerInit(){
+        countDown = Timer(timeInterval: 1, repeats: true, block: { [weak self] _ in
+            self?.countDownTimer()
+        })
+        
+        guard let timer = countDown else {
+            return
+        }
+        RunLoop.current.add(timer, forMode: .commonModes)
+    }
+    
     /// 下一个图片
     
     func nextImage() {
@@ -136,8 +152,6 @@ class BannerUseScrollViewController: UIViewController {
                 
                 linkPlayer[pageView.currentPage]?.play()
                 removeTimer()
-                
-                //NotificationCenter.default.addObserver(self, selector: Selector(("playerDidFinishPlaying:")),name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: linkPlayer[pageView.currentPage]?.currentItem)
                 
                 NotificationCenter.default.addObserver(self, selector:#selector(playerDidFinishPlaying(note:)),name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: linkPlayer[pageView.currentPage]?.currentItem)
                 
@@ -178,6 +192,17 @@ class BannerUseScrollViewController: UIViewController {
         linkPlayer[pageView.currentPage]?.pause()
         nextImage()
     }
+    
+    func countDownTimer(){
+        
+        getTimeCountDown = getTimeCountDown! - 1
+        
+        if getTimeCountDown == 0 {
+            
+            alertAuthTimeIfEnd()
+        }
+    }
+    
     /// 上一个图片
     /*
      func preImage() {
@@ -193,33 +218,54 @@ class BannerUseScrollViewController: UIViewController {
      scrollView.setContentOffset(contentOffset, animated: true)
      }
      */
-}
-
-//時間轉秒器
-func parseDuration(timeString: String) -> TimeInterval {
-    guard !timeString.isEmpty else {
-        return 0
+    
+    
+    //時間轉秒器
+    func parseDuration(timeString: String) -> Int {
+        guard !timeString.isEmpty else {
+            return 0
+        }
+        
+        var interval:Double = 0
+        
+        let parts = timeString.components(separatedBy: ":")
+        for (index, part) in parts.reversed().enumerated() {
+            interval += (Double(part) ?? 0) * pow(Double(60), Double(index))
+        }
+        
+        return Int(interval)
     }
     
-    var interval:Double = 0
-    
-    let parts = timeString.components(separatedBy: ":")
-    for (index, part) in parts.reversed().enumerated() {
-        interval += (Double(part) ?? 0) * pow(Double(60), Double(index))
+    func getFileExt(path: String) -> String{
+        
+        let filename: NSString = path as NSString
+        let pathExtention = filename.pathExtension
+        //let pathPrefix = filename.deletingPathExtension
+        
+        return pathExtention
     }
     
-    return interval
+    func alertAuthTimeIfEnd(){
+        
+        let alertController = UIAlertController(title: "期限提醒", message: "請問是否想續約, 否則關閉程式", preferredStyle: UIAlertControllerStyle.alert)
+        
+        let OkAction = UIAlertAction(title: "是", style: .default) { (action: UIAlertAction!) in
+            
+            self.getTimeCountDown = self.fixedTimer
+        }
+        alertController.addAction(OkAction)
+        
+        let cancelAction = UIAlertAction(title: "否", style: .cancel) { (action:UIAlertAction!) in
+            
+            exit(0)
+        }
+        alertController.addAction(cancelAction)
+        
+        // Present Dialog message
+        present(alertController, animated: true, completion:nil)
+        
+    }
 }
-
-func getFileExt(path: String) -> String{
-    
-    let filename: NSString = path as NSString
-    let pathExtention = filename.pathExtension
-    //let pathPrefix = filename.deletingPathExtension
-    
-    return pathExtention
-}
-
 extension BannerUseScrollViewController: UIScrollViewDelegate {
     
     func showToast(message : String) {
@@ -234,7 +280,7 @@ extension BannerUseScrollViewController: UIScrollViewDelegate {
         toastLabel.layer.cornerRadius = 10;
         toastLabel.clipsToBounds  =  true
         self.view.addSubview(toastLabel)
-        UIView.animate(withDuration: 1, delay: 3, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 1, delay: 10, options: .curveEaseOut, animations: {
             toastLabel.alpha = 0.0
         }, completion: {(isCompleted) in
             toastLabel.removeFromSuperview()
