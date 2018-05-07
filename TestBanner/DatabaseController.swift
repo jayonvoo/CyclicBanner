@@ -103,6 +103,20 @@ class DatabaseController: UIViewController{
         return text!
     }
     
+    func updateDBTable(timeFormat: String, address: String){
+        
+        var returnStmt: OpaquePointer?
+        let sql = "update IPPlayerDB_ip set auth = '\(timeFormat)' where address = '\(address)'"
+        
+        if sqlite3_prepare_v2(
+            db, (sql as NSString).utf8String, -1, &returnStmt, nil) == SQLITE_OK {
+            if sqlite3_step(returnStmt) == SQLITE_DONE {
+                print("更新資料成功")
+            }
+            sqlite3_finalize(returnStmt)
+        }
+    }
+    
     func getDirectoryPath() -> String {
         
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)

@@ -25,6 +25,18 @@ class BannerUseScrollViewController: UIViewController {
     
     override func viewDidLoad() {
         
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.resigningActive),
+            name: NSNotification.Name.UIApplicationWillResignActive,
+            object: nil)
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.becomeActive),
+            name: NSNotification.Name.UIApplicationDidBecomeActive,
+            object: nil)
+        
         super.viewDidLoad()
         
         dbDelegate.viewDidLoad()
@@ -42,6 +54,7 @@ class BannerUseScrollViewController: UIViewController {
         setupViews()
         addTimer()
         countDownTimerInit()
+        
     }
     
     func setupViews() {
@@ -63,8 +76,6 @@ class BannerUseScrollViewController: UIViewController {
         
         do {
             /// 只使用3个UIImageView，依次设置好最后一个，第一个，第二个图片，这里面使用取模运算。
-            
-            
             for index in 0..<getPathArray.count {
                 
                 if getFileExt(path: getPathArray[index]) == "mp4"{
@@ -233,7 +244,20 @@ class BannerUseScrollViewController: UIViewController {
             interval += (Double(part) ?? 0) * pow(Double(60), Double(index))
         }
         
+        print("Interval: \(interval)")
+        
         return Int(interval)
+    }
+    
+    //秒轉時間
+    func hmsFrom(seconds: Int, completion: @escaping (_ hours: Int, _ minutes: Int, _ seconds: Int)->()) {
+        
+        completion(seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
+        
+    }
+    func getStringFrom(seconds: Int) -> String {
+        
+        return seconds < 10 ? "0\(seconds)" : "\(seconds)"
     }
     
     func getFileExt(path: String) -> String{
@@ -265,6 +289,26 @@ class BannerUseScrollViewController: UIViewController {
         present(alertController, animated: true, completion:nil)
         
     }
+    
+    
+    @objc fileprivate func resigningActive() {
+        print("== resigningActive ==")
+        
+        hmsFrom(seconds: getTimeCountDown!) { hours, minutes, seconds in
+            
+            let hours = self.getStringFrom(seconds: hours)
+            let minutes = self.getStringFrom(seconds: minutes)
+            let seconds = self.getStringFrom(seconds: seconds)
+            
+            self.dbDelegate.updateDBTable(timeFormat: "\(hours):\(minutes):\(seconds)", address: self.dbDelegate.getWiFiAddress()!)
+        }
+    }
+    
+    @objc fileprivate func becomeActive() {
+        print("== becomeActive ==")
+        linkPlayer[pageView.currentPage]?.play()
+    }
+    
 }
 extension BannerUseScrollViewController: UIScrollViewDelegate {
     
@@ -280,7 +324,7 @@ extension BannerUseScrollViewController: UIScrollViewDelegate {
         toastLabel.layer.cornerRadius = 10;
         toastLabel.clipsToBounds  =  true
         self.view.addSubview(toastLabel)
-        UIView.animate(withDuration: 1, delay: 10, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 1, delay: 5, options: .curveEaseOut, animations: {
             toastLabel.alpha = 0.0
         }, completion: {(isCompleted) in
             toastLabel.removeFromSuperview()
