@@ -40,6 +40,7 @@ class DatabaseController: UIViewController{
         print("Database OK")
     }
     
+    ///插入初始化資料
     func insertInitialData(auth: String, address: String, console: String, cycle_time: Int){
         
         let insertSqlQuery = "insert into IPPlayerDB_ip(auth, address, console, cycle_time) values('\(auth)', '\(address)', '\(console)', \(cycle_time))"
@@ -56,7 +57,7 @@ class DatabaseController: UIViewController{
         
     }
     
-    
+    ///檢查特定ip資料表是否已存在
     func checkIfExists(address: String) -> Bool{
         
         var returnStmt: OpaquePointer? = nil
@@ -74,10 +75,11 @@ class DatabaseController: UIViewController{
         }
     }
     
+    ///取得特定ip的多媒體路徑
     func getDBValue_address(ip_address: String) -> [String]{
         
         var returnStmt: OpaquePointer?
-        //let sqlQuery = "select * from IPPlayerDB_data where address = '192.168.0.138'"
+        //let sqlQuery = "select * from IPPlayerDB_data where address = '192.168.100.3'"
         let sqlQuery = "select * from IPPlayerDB_data where address = '\(ip_address)'"
         sqlite3_prepare(db, sqlQuery, -1, &returnStmt, nil)
         
@@ -89,6 +91,7 @@ class DatabaseController: UIViewController{
         return pathArray
     }
     
+    ///取得特定ip的訪問時限
     func getDBValue_auth(ip_address: String) -> String{
         
         var text: String?
@@ -103,6 +106,7 @@ class DatabaseController: UIViewController{
         return text!
     }
     
+    ///更新指定的ip時限
     func updateDBTable(timeFormat: String, address: String){
         
         var returnStmt: OpaquePointer?
@@ -117,6 +121,7 @@ class DatabaseController: UIViewController{
         }
     }
     
+    ///取得系統文件路徑
     func getDirectoryPath() -> String {
         
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)

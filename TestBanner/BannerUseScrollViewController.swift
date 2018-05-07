@@ -25,22 +25,24 @@ class BannerUseScrollViewController: UIViewController {
     
     override func viewDidLoad() {
         
+        ///參數傳遞
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.resigningActive),
             name: NSNotification.Name.UIApplicationWillResignActive,
             object: nil)
         
+        ///如⇡
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.becomeActive),
             name: NSNotification.Name.UIApplicationDidBecomeActive,
             object: nil)
         
-        super.viewDidLoad()
-        
+        ///初始化資料庫
         dbDelegate.viewDidLoad()
         
+        ///預設空Table時，插入資料
         dbDelegate.insertInitialData(auth: "01:00:00", address: dbDelegate.getWiFiAddress()!, console: "huawei", cycle_time: 10)
         getPathArray = dbDelegate.getDBValue_address(ip_address: dbDelegate.getWiFiAddress()!)
         getTimeAuth = dbDelegate.getDBValue_auth(ip_address: dbDelegate.getWiFiAddress()!)
@@ -48,15 +50,17 @@ class BannerUseScrollViewController: UIViewController {
         fixedTimer = parseDuration(timeString: dbDelegate.getDBValue_auth(ip_address: dbDelegate.getWiFiAddress()!))
         getTimeCountDown = fixedTimer
         
+        
         print(dbDelegate.getWiFiAddress()!)
         print(dbDelegate.getDirectoryPath())
         
         setupViews()
-        addTimer()
-        countDownTimerInit()
+        addTimer()  ///計時錶開始
+        countDownTimerInit()  ///倒數計時
         
     }
     
+    ///初始化scrollView框架
     func setupViews() {
         
         do {
@@ -121,7 +125,6 @@ class BannerUseScrollViewController: UIViewController {
     }
     
     /// 添加timer
-    
     func addTimer() {
         timer = Timer(timeInterval: 5, repeats: true, block: { [weak self] _ in
             self?.nextImage()
@@ -133,11 +136,13 @@ class BannerUseScrollViewController: UIViewController {
         RunLoop.current.add(timer, forMode: .commonModes)
     }
     
+    ///暫停累加計時器
     func removeTimer() {
         timer?.invalidate()
         timer = nil
     }
     
+    ///計時器每秒更新
     func countDownTimerInit(){
         countDown = Timer(timeInterval: 1, repeats: true, block: { [weak self] _ in
             self?.countDownTimer()
@@ -150,7 +155,6 @@ class BannerUseScrollViewController: UIViewController {
     }
     
     /// 下一个图片
-    
     func nextImage() {
         print("next_image: \(pageView.currentPage)")
         if pageView.currentPage == getPathArray.count - 1 {
@@ -194,6 +198,7 @@ class BannerUseScrollViewController: UIViewController {
         }
     }
     
+    ///偵測影片播放結束
     @objc func playerDidFinishPlaying(note: NSNotification) {
         print("Video Finished")
         
@@ -204,34 +209,17 @@ class BannerUseScrollViewController: UIViewController {
         nextImage()
     }
     
+    ///倒數計時
     func countDownTimer(){
         
         getTimeCountDown = getTimeCountDown! - 1
         
         if getTimeCountDown == 0 {
-            
             alertAuthTimeIfEnd()
         }
     }
     
-    /// 上一个图片
-    /*
-     func preImage() {
-     print("prev_image: \(pageView.currentPage)")
-     if pageView.currentPage == 0 {
-     pageView.currentPage = imageCount - 1
-     } else {
-     pageView.currentPage -= 1
-     }
-     
-     let contentOffset = CGPoint(x: 0, y: 0)
-     scrollView.contentOffset = contentOffset
-     scrollView.setContentOffset(contentOffset, animated: true)
-     }
-     */
-    
-    
-    //時間轉秒器
+    ///時間轉秒器
     func parseDuration(timeString: String) -> Int {
         guard !timeString.isEmpty else {
             return 0
@@ -249,7 +237,7 @@ class BannerUseScrollViewController: UIViewController {
         return Int(interval)
     }
     
-    //秒轉時間
+    ///秒轉時間
     func hmsFrom(seconds: Int, completion: @escaping (_ hours: Int, _ minutes: Int, _ seconds: Int)->()) {
         
         completion(seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
@@ -260,15 +248,16 @@ class BannerUseScrollViewController: UIViewController {
         return seconds < 10 ? "0\(seconds)" : "\(seconds)"
     }
     
+    ///取得文件擴展名
     func getFileExt(path: String) -> String{
         
         let filename: NSString = path as NSString
         let pathExtention = filename.pathExtension
-        //let pathPrefix = filename.deletingPathExtension
         
         return pathExtention
     }
     
+    ///ip存取權限警示
     func alertAuthTimeIfEnd(){
         
         let alertController = UIAlertController(title: "期限提醒", message: "請問是否想續約, 否則關閉程式", preferredStyle: UIAlertControllerStyle.alert)
@@ -290,7 +279,7 @@ class BannerUseScrollViewController: UIViewController {
         
     }
     
-    
+    ///程式暫停時存取資料庫
     @objc fileprivate func resigningActive() {
         print("== resigningActive ==")
         
@@ -304,12 +293,15 @@ class BannerUseScrollViewController: UIViewController {
         }
     }
     
+    ///程式回復，繼續播放影片
     @objc fileprivate func becomeActive() {
         print("== becomeActive ==")
         linkPlayer[pageView.currentPage]?.play()
     }
     
 }
+
+///初始化小訊息
 extension BannerUseScrollViewController: UIScrollViewDelegate {
     
     func showToast(message : String) {
