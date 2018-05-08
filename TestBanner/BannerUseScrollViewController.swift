@@ -22,8 +22,14 @@ class BannerUseScrollViewController: UIViewController {
     var getPathArray = [String]()
     var getTimeAuth: String?
     var linkPlayer = [Int : AVPlayer]()
+    var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+    
+    @IBOutlet var popUpBoxView: UIView!
     
     override func viewDidLoad() {
+        
+        visualEffectView.frame = CGRect(x: 0, y: 0, width: kScreenWidth, height: kScreenHeight)
+        popUpBoxView.layer.cornerRadius = 5
         
         ///參數傳遞
         NotificationCenter.default.addObserver(
@@ -49,7 +55,6 @@ class BannerUseScrollViewController: UIViewController {
         showToast(message: "成功連線")
         fixedTimer = parseDuration(timeString: dbDelegate.getDBValue_auth(ip_address: dbDelegate.getWiFiAddress()!))
         getTimeCountDown = fixedTimer
-        
         
         print(dbDelegate.getWiFiAddress()!)
         print(dbDelegate.getDirectoryPath())
@@ -142,6 +147,12 @@ class BannerUseScrollViewController: UIViewController {
         timer = nil
     }
     
+    ///暫停倒數計時器
+    func removeCountDownTimer() {
+        countDown?.invalidate()
+        countDown = nil
+    }
+    
     ///計時器每秒更新
     func countDownTimerInit(){
         countDown = Timer(timeInterval: 1, repeats: true, block: { [weak self] _ in
@@ -212,10 +223,11 @@ class BannerUseScrollViewController: UIViewController {
     ///倒數計時
     func countDownTimer(){
         
-        getTimeCountDown = getTimeCountDown! - 1
-        
-        if getTimeCountDown == 0 {
-            alertAuthTimeIfEnd()
+        if getTimeCountDown! == 0 {
+            alertPopEffectView()
+            removeCountDownTimer()
+        }else {
+            getTimeCountDown = getTimeCountDown! - 1
         }
     }
     
@@ -277,6 +289,20 @@ class BannerUseScrollViewController: UIViewController {
         // Present Dialog message
         present(alertController, animated: true, completion:nil)
         
+    }
+    
+    func alertPopEffectView(){
+        
+        view.addSubview(visualEffectView)
+        view.addSubview(popUpBoxView)
+        popUpBoxView.center = view.center
+        popUpBoxView.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
+        popUpBoxView.alpha = 0
+        
+        UIView.animate(withDuration: 0.4) {
+            self.popUpBoxView.alpha = 1
+            self.popUpBoxView.transform = CGAffineTransform.identity
+        }
     }
     
     ///程式暫停時存取資料庫
