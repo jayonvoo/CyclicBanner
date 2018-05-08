@@ -125,7 +125,7 @@ class BannerUseScrollViewController: UIViewController {
         }
         
         let contentOffset = CGPoint(x: 0, y: 0)
-        scrollView.contentOffset = contentOffset
+        //scrollView.contentOffset = contentOffset
         scrollView.setContentOffset(contentOffset, animated: true)
     }
     
@@ -173,7 +173,7 @@ class BannerUseScrollViewController: UIViewController {
             
             let contentOffset = CGPoint(x: 0, y: 0)
             scrollView.setContentOffset(contentOffset, animated: true)
-            
+            print("typeOf_T: \(type(of: scrollView.subviews[pageView.currentPage]))")
             if type(of: scrollView.subviews[pageView.currentPage]) != type(of: UIImageView()){
                 
                 linkPlayer[pageView.currentPage]?.play()
@@ -182,7 +182,7 @@ class BannerUseScrollViewController: UIViewController {
                 NotificationCenter.default.addObserver(self, selector:#selector(playerDidFinishPlaying(note:)),name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: linkPlayer[pageView.currentPage]?.currentItem)
                 
                 linkPlayer[pageView.currentPage]?.seek(to: kCMTimeZero)
-            } else {
+            } else if timer == nil{
                 addTimer()
             }
             
@@ -194,14 +194,14 @@ class BannerUseScrollViewController: UIViewController {
             
             let contentOffset = CGPoint(x: kScreenWidth * getPage, y: 0)
             scrollView.setContentOffset(contentOffset, animated: true)
-            
+            print("typeOf_T: \(type(of: scrollView.subviews[pageView.currentPage]))")
             if type(of: scrollView.subviews[pageView.currentPage]) != type(of: UIImageView()){
                 
                 linkPlayer[pageView.currentPage]?.play()
                 removeTimer()
                 
                 NotificationCenter.default.addObserver(self, selector:#selector(playerDidFinishPlaying(note:)),name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: linkPlayer[pageView.currentPage]?.currentItem)
-            }else {
+            }else if timer == nil{
                 addTimer()
             }
         }
@@ -303,8 +303,6 @@ class BannerUseScrollViewController: UIViewController {
             self.popUpBoxView.alpha = 1
             self.popUpBoxView.transform = CGAffineTransform.identity
         }
-        
-        print("popUpBoxView_frame: \(popUpBoxView.frame)")
     }
     
     ///程式暫停時存取資料庫
@@ -342,11 +340,12 @@ extension BannerUseScrollViewController: UIScrollViewDelegate {
         toastLabel.alpha = 1.0
         toastLabel.layer.cornerRadius = 10;
         toastLabel.clipsToBounds  =  true
-        self.view.addSubview(toastLabel)
+        
         UIView.animate(withDuration: 1, delay: 5, options: .curveEaseOut, animations: {
             toastLabel.alpha = 0.0
         }, completion: {(isCompleted) in
             toastLabel.removeFromSuperview()
         })
+        self.view.addSubview(toastLabel)
     }
 }

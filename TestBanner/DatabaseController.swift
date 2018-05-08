@@ -79,7 +79,6 @@ class DatabaseController: UIViewController{
     func getDBValue_address(ip_address: String) -> [String]{
         
         var returnStmt: OpaquePointer?
-        //let sqlQuery = "select * from IPPlayerDB_data where address = '192.168.100.3'"
         let sqlQuery = "select * from IPPlayerDB_data where address = '\(ip_address)'"
         sqlite3_prepare(db, sqlQuery, -1, &returnStmt, nil)
         
@@ -165,5 +164,6 @@ class DatabaseController: UIViewController{
         freeifaddrs(ifaddr)
         
         return address
+        //return "192.168.100.3"
     }
 }
