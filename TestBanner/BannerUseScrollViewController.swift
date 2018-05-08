@@ -203,8 +203,6 @@ class BannerUseScrollViewController: UIViewController {
                 NotificationCenter.default.addObserver(self, selector:#selector(playerDidFinishPlaying(note:)),name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: linkPlayer[pageView.currentPage]?.currentItem)
             }else {
                 addTimer()
-                
-                
             }
         }
     }
@@ -291,11 +289,13 @@ class BannerUseScrollViewController: UIViewController {
         
     }
     
+    //模糊和小版面顯示
     func alertPopEffectView(){
         
         view.addSubview(visualEffectView)
         view.addSubview(popUpBoxView)
-        popUpBoxView.center = view.center
+        popUpBoxView.frame.origin.x += 30
+        popUpBoxView.frame.origin.y += 240
         popUpBoxView.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
         popUpBoxView.alpha = 0
         
@@ -303,6 +303,8 @@ class BannerUseScrollViewController: UIViewController {
             self.popUpBoxView.alpha = 1
             self.popUpBoxView.transform = CGAffineTransform.identity
         }
+        
+        print("popUpBoxView_frame: \(popUpBoxView.frame)")
     }
     
     ///程式暫停時存取資料庫
@@ -324,7 +326,6 @@ class BannerUseScrollViewController: UIViewController {
         print("== becomeActive ==")
         linkPlayer[pageView.currentPage]?.play()
     }
-    
 }
 
 ///初始化小訊息
