@@ -12,12 +12,15 @@ import AVFoundation
 
 class BannerUseScrollViewController: UIViewController {
     
+    var databaseIsReject = false
+    var getGlobalToast: UILabel?
     var fixedTimer: Int?
     var getTimeCountDown: Int?
     var scrollView: UIScrollView!
     var pageView: UIPageControl!
     var timer: Timer?
     var countDown: Timer?
+    var toastTimerCount = 0
     var dbDelegate = DatabaseController()
     var getPathArray = [String]()
     var getTimeAuth: String?
@@ -52,16 +55,28 @@ class BannerUseScrollViewController: UIViewController {
         dbDelegate.insertInitialData(auth: "01:00:00", address: dbDelegate.getWiFiAddress()!, console: "huawei", cycle_time: 10)
         getPathArray = dbDelegate.getDBValue_address(ip_address: dbDelegate.getWiFiAddress()!)
         getTimeAuth = dbDelegate.getDBValue_auth(ip_address: dbDelegate.getWiFiAddress()!)
-        showToast(message: "成功連線")
+        
         fixedTimer = parseDuration(timeString: dbDelegate.getDBValue_auth(ip_address: dbDelegate.getWiFiAddress()!))
-        getTimeCountDown = fixedTimer
         
-        print(dbDelegate.getWiFiAddress()!)
-        print(dbDelegate.getDirectoryPath())
+        if fixedTimer != 0{
+            
+            showToast(message: "成功連線")
+            toastTimer()
+            databaseIsReject = false
+            getTimeCountDown = fixedTimer
+            
+            print(dbDelegate.getWiFiAddress()!)
+            print(dbDelegate.getDirectoryPath())
+            
+            setupViews()
+            addTimer()  ///計時錶開始
+            countDownTimerInit()  ///倒數計時
+        }else{
+            showToast(message: "拒絕連線，期限已到")
+            toastTimer()
+            databaseIsReject = true
+        }
         
-        setupViews()
-        addTimer()  ///計時錶開始
-        countDownTimerInit()  ///倒數計時
         
     }
     
@@ -165,9 +180,27 @@ class BannerUseScrollViewController: UIViewController {
         RunLoop.current.add(timer, forMode: .commonModes)
     }
     
+    func toastTimer(){
+        countDown = Timer(timeInterval: 1, repeats: true, block: { [weak self] _ in
+            self?.toastTimerCount += 1
+            
+            if self?.toastTimerCount == 5{
+                if self?.getGlobalToast != nil{
+                    self?.getGlobalToast?.removeFromSuperview()
+                }
+            }
+            
+        })
+        
+        guard let timer = countDown else {
+            return
+        }
+        RunLoop.current.add(timer, forMode: .commonModes)
+    }
+    
     /// 下一个图片
     func nextImage() {
-
+        
         if pageView.currentPage == getPathArray.count - 1 {
             pageView.currentPage = 0
             
@@ -283,7 +316,7 @@ class BannerUseScrollViewController: UIViewController {
         present(alertController, animated: true, completion:nil)
         
     }
-     
+    
     //模糊和小版面顯示
     func alertPopEffectView(){
         
@@ -302,22 +335,26 @@ class BannerUseScrollViewController: UIViewController {
     
     ///程式暫停時存取資料庫
     @objc fileprivate func resigningActive() {
-        print("== resigningActive ==")
         
-        hmsFrom(seconds: getTimeCountDown!) { hours, minutes, seconds in
-            
-            let hours = self.getStringFrom(seconds: hours)
-            let minutes = self.getStringFrom(seconds: minutes)
-            let seconds = self.getStringFrom(seconds: seconds)
-            
-            self.dbDelegate.updateDBTable(timeFormat: "\(hours):\(minutes):\(seconds)", address: self.dbDelegate.getWiFiAddress()!)
+        if !databaseIsReject{
+            hmsFrom(seconds: getTimeCountDown!) { hours, minutes, seconds in
+                
+                let hours = self.getStringFrom(seconds: hours)
+                let minutes = self.getStringFrom(seconds: minutes)
+                let seconds = self.getStringFrom(seconds: seconds)
+                
+                self.dbDelegate.updateDBTable(timeFormat: "\(hours):\(minutes):\(seconds)", address: self.dbDelegate.getWiFiAddress()!)
+            }
         }
     }
     
     ///程式回復，繼續播放影片
     @objc fileprivate func becomeActive() {
-        print("== becomeActive ==")
-        linkPlayer[pageView.currentPage]?.play()
+        
+        if !databaseIsReject{
+            linkPlayer[pageView.currentPage]?.play()
+        }
+        
     }
 }
 
@@ -326,7 +363,9 @@ extension BannerUseScrollViewController: UIScrollViewDelegate {
     
     func showToast(message : String) {
         
-        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 75, y: self.view.frame.size.height-100, width: 150, height: 35))
+        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 75, y: self.view.frame.size.height-100, width: 200, height: 35))
+        toastLabel.center = view.center
+        toastLabel.center.y = 650
         toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         toastLabel.textColor = UIColor.white
         toastLabel.textAlignment = .center;
@@ -336,11 +375,8 @@ extension BannerUseScrollViewController: UIScrollViewDelegate {
         toastLabel.layer.cornerRadius = 10;
         toastLabel.clipsToBounds  =  true
         self.view.addSubview(toastLabel)
-        /*UIView.animate(withDuration: 1, delay: 5, options: .curveEaseOut, animations: {
-            toastLabel.alpha = 0.0
-        }, completion: {(isCompleted) in
-            toastLabel.removeFromSuperview()
-        })*/
+        
+        getGlobalToast = toastLabel
         
     }
 }
