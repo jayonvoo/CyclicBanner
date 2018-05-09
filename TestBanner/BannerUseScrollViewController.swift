@@ -167,13 +167,12 @@ class BannerUseScrollViewController: UIViewController {
     
     /// 下一个图片
     func nextImage() {
-        print("next_image: \(pageView.currentPage)")
+
         if pageView.currentPage == getPathArray.count - 1 {
             pageView.currentPage = 0
             
             let contentOffset = CGPoint(x: 0, y: 0)
             scrollView.setContentOffset(contentOffset, animated: true)
-            print("typeOf_T: \(type(of: scrollView.subviews[pageView.currentPage]))")
             if type(of: scrollView.subviews[pageView.currentPage]) != type(of: UIImageView()){
                 
                 linkPlayer[pageView.currentPage]?.play()
@@ -194,7 +193,6 @@ class BannerUseScrollViewController: UIViewController {
             
             let contentOffset = CGPoint(x: kScreenWidth * getPage, y: 0)
             scrollView.setContentOffset(contentOffset, animated: true)
-            print("typeOf_T: \(type(of: scrollView.subviews[pageView.currentPage]))")
             if type(of: scrollView.subviews[pageView.currentPage]) != type(of: UIImageView()){
                 
                 linkPlayer[pageView.currentPage]?.play()
@@ -209,7 +207,6 @@ class BannerUseScrollViewController: UIViewController {
     
     ///偵測影片播放結束
     @objc func playerDidFinishPlaying(note: NSNotification) {
-        print("Video Finished")
         
         NotificationCenter.default.removeObserver(self)
         
@@ -241,8 +238,6 @@ class BannerUseScrollViewController: UIViewController {
         for (index, part) in parts.reversed().enumerated() {
             interval += (Double(part) ?? 0) * pow(Double(60), Double(index))
         }
-        
-        print("Interval: \(interval)")
         
         return Int(interval)
     }
@@ -288,7 +283,7 @@ class BannerUseScrollViewController: UIViewController {
         present(alertController, animated: true, completion:nil)
         
     }
-    
+     
     //模糊和小版面顯示
     func alertPopEffectView(){
         
@@ -340,12 +335,12 @@ extension BannerUseScrollViewController: UIScrollViewDelegate {
         toastLabel.alpha = 1.0
         toastLabel.layer.cornerRadius = 10;
         toastLabel.clipsToBounds  =  true
-        
-        UIView.animate(withDuration: 1, delay: 5, options: .curveEaseOut, animations: {
+        self.view.addSubview(toastLabel)
+        /*UIView.animate(withDuration: 1, delay: 5, options: .curveEaseOut, animations: {
             toastLabel.alpha = 0.0
         }, completion: {(isCompleted) in
             toastLabel.removeFromSuperview()
-        })
-        self.view.addSubview(toastLabel)
+        })*/
+        
     }
 }
