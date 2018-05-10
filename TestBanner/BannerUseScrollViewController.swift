@@ -26,6 +26,7 @@ class BannerUseScrollViewController: UIViewController {
     var getTimeAuth: String?
     var linkPlayer = [Int : AVPlayer]()
     var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+    var blockView = BlockViewController()
     
     @IBOutlet var popUpBoxView: UIView!
     
@@ -58,6 +59,7 @@ class BannerUseScrollViewController: UIViewController {
         
         fixedTimer = parseDuration(timeString: dbDelegate.getDBValue_auth(ip_address: dbDelegate.getWiFiAddress()!))
         
+        
         if fixedTimer != 0{
             
             showToast(message: "成功連線")
@@ -72,12 +74,22 @@ class BannerUseScrollViewController: UIViewController {
             addTimer()  ///計時錶開始
             countDownTimerInit()  ///倒數計時
         }else{
-            showToast(message: "拒絕連線，期限已到")
-            toastTimer()
+            
+            //self.navigationController!.pushViewController(blockView, animated: true)
+            //showToast(message: "拒絕連線，期限已到")
+            //toastTimer()
             databaseIsReject = true
         }
         
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if fixedTimer == 0{
+            performSegue(withIdentifier: "toBlockView", sender: nil)
+        }
     }
     
     ///初始化scrollView框架
