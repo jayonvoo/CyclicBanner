@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -95,13 +96,15 @@
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="1457181975ba7106c730c615c9808f77.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="M52-sn-0eY">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" image="imageedit_9_5739392440.png" translatesAutoresizingMaskIntoConstraints="NO" id="w5p-Y1-O62">
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="imageedit_9_5739392440.png" translatesAutoresizingMaskIntoConstraints="NO" id="w5p-Y1-O62">
                                 <rect key="frame" x="62" y="101" width="251" height="193"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="193" id="eli-is-0zr"/>
+                                    <constraint firstAttribute="width" secondItem="w5p-Y1-O62" secondAttribute="height" multiplier="251:193" id="m6s-Ss-w1g"/>
+                                </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MyPlayer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ijm-4v-G80">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MyPlayer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ijm-4v-G80">
                                 <rect key="frame" x="97" y="309" width="181" height="48"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="40"/>
                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -109,9 +112,16 @@
                         </subviews>
                         <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="w5p-Y1-O62" firstAttribute="centerX" secondItem="Ijm-4v-G80" secondAttribute="centerX" id="2oY-wu-pNe"/>
                             <constraint firstItem="M52-sn-0eY" firstAttribute="top" secondItem="hAR-3a-anz" secondAttribute="top" id="9j6-su-vRU"/>
+                            <constraint firstItem="w5p-Y1-O62" firstAttribute="leading" secondItem="hAR-3a-anz" secondAttribute="leading" constant="62" id="C2D-AK-D2l"/>
+                            <constraint firstItem="Ijm-4v-G80" firstAttribute="centerX" secondItem="hAR-3a-anz" secondAttribute="centerX" id="CSm-cf-wlG"/>
+                            <constraint firstItem="w5p-Y1-O62" firstAttribute="top" secondItem="YG9-cd-Ega" secondAttribute="bottom" constant="81" id="GNH-EM-Hug"/>
                             <constraint firstAttribute="bottom" secondItem="M52-sn-0eY" secondAttribute="bottom" id="Nab-RA-9HE"/>
+                            <constraint firstItem="Ijm-4v-G80" firstAttribute="top" secondItem="w5p-Y1-O62" secondAttribute="bottom" constant="15" id="ahZ-9H-Lez"/>
                             <constraint firstItem="M52-sn-0eY" firstAttribute="leading" secondItem="hAR-3a-anz" secondAttribute="leading" id="mUs-do-f8o"/>
+                            <constraint firstItem="w5p-Y1-O62" firstAttribute="centerX" secondItem="hAR-3a-anz" secondAttribute="centerX" id="nyn-mT-nZl"/>
+                            <constraint firstAttribute="trailing" secondItem="w5p-Y1-O62" secondAttribute="trailing" constant="62" id="r21-IU-DqT"/>
                             <constraint firstAttribute="trailing" secondItem="M52-sn-0eY" secondAttribute="trailing" id="wMn-uP-Qd5"/>
                         </constraints>
                     </view>
