@@ -9,7 +9,7 @@
 import UIKit
 
 class BannerUseCollectionViewController: UIViewController {
-
+    
     let images = ["0.png", "1.png", "2.png", "3.png"]
     var collectionView: UICollectionView!
     var pageView: UIPageControl!
