@@ -35,7 +35,7 @@ class BannerUseScrollViewController: UIViewController {
         visualEffectView.frame = CGRect(x: 0, y: 0, width: kScreenWidth, height: kScreenHeight)
         popUpBoxView.layer.cornerRadius = 5
         
-        ///參數傳遞
+        ///暫存和參數傳遞
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.resigningActive),
