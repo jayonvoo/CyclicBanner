@@ -12,6 +12,7 @@ import AVFoundation
 
 class BannerUseScrollViewController: UIViewController {
     
+    var imageView: UIImageView?
     var databaseIsReject = false
     var getGlobalToast: UILabel?
     var fixedTimer: Int?
@@ -31,6 +32,8 @@ class BannerUseScrollViewController: UIViewController {
     @IBOutlet var popUpBoxView: UIView!
     
     override func viewDidLoad() {
+        
+        print("bounds size portrait: \(UIScreen.main.bounds)")
         
         visualEffectView.frame = CGRect(x: 0, y: 0, width: kScreenWidth, height: kScreenHeight)
         popUpBoxView.layer.cornerRadius = 5
@@ -80,8 +83,6 @@ class BannerUseScrollViewController: UIViewController {
             toastTimer()
             databaseIsReject = true
         }
-        
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -89,6 +90,29 @@ class BannerUseScrollViewController: UIViewController {
         
         if fixedTimer == 0{
             performSegue(withIdentifier: "toBlockView", sender: nil)
+        }
+    }
+    
+    override func viewWillLayoutSubviews() {
+        //setupScale()
+        if UIDeviceOrientationIsLandscape(UIDevice.current.orientation) {
+            print("Landscape")
+            
+            let screenSize = UIScreen.main.bounds
+            let screenWidth = screenSize.width
+            let screenHeight = screenSize.height
+            
+            scrollView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
+            
+            for i in 0..<getPathArray.count{
+                scrollView.subviews[i].frame.origin.x = screenWidth * CGFloat(i)
+                scrollView.subviews[i].frame.size.width = screenWidth
+                scrollView.subviews[i].frame.size.height = screenHeight
+            }
+        }
+        
+        if UIDeviceOrientationIsPortrait(UIDevice.current.orientation) {
+            print("Portrait")
         }
     }
     
@@ -127,18 +151,17 @@ class BannerUseScrollViewController: UIViewController {
                     playerLayer.didMove(toParentViewController: self)
                 }else{
                     
-                    let imageView = UIImageView(frame: CGRect(x: CGFloat(index) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
+                    imageView = UIImageView(frame: CGRect(x: CGFloat(index) * kScreenWidth, y: 0, width: kScreenWidth, height: 250))
                     
                     let url = URL(string: getPathArray[index])
                     if let data = try? Data(contentsOf: url!)
                     {
                         let image: UIImage = UIImage(data: data)!
                         
-                        imageView.image = image
+                        imageView?.image = image
                         
-                        scrollView.addSubview(imageView)
+                        scrollView.addSubview(imageView!)
                     }
-                    
                 }
             }
         }
@@ -213,6 +236,9 @@ class BannerUseScrollViewController: UIViewController {
     /// 下一个图片
     func nextImage() {
         
+        let screenSize = UIScreen.main.bounds
+        let screenWidth = screenSize.width
+        
         if pageView.currentPage == getPathArray.count - 1 {
             pageView.currentPage = 0
             
@@ -236,7 +262,7 @@ class BannerUseScrollViewController: UIViewController {
             
             let getPage = CGFloat(pageView.currentPage)
             
-            let contentOffset = CGPoint(x: kScreenWidth * getPage, y: 0)
+            let contentOffset = CGPoint(x: screenWidth * getPage, y: 0)
             scrollView.setContentOffset(contentOffset, animated: true)
             if type(of: scrollView.subviews[pageView.currentPage]) != type(of: UIImageView()){
                 
@@ -344,6 +370,40 @@ class BannerUseScrollViewController: UIViewController {
             self.popUpBoxView.transform = CGAffineTransform.identity
         }
     }
+    /*
+     func setupScale() {
+     
+     scrollView.frame = UIScreen.main.bounds
+     scrollView.contentSize = (detailImage.image?.size)!
+     scrollViewContents()
+     let scrollViewFrame = scrollView.frame
+     let scaleWidth = scrollViewFrame.size.width / scrollView.contentSize.width
+     let scaleHieght = scrollViewFrame.size.height / scrollView.contentSize.height
+     let minScale = min(scaleHieght, scaleWidth)
+     scrollView.minimumZoomScale = minScale
+     scrollView.maximumZoomScale = 1
+     scrollView.zoomScale = minScale
+     }*/
+    /*
+     func scrollViewContents() {
+     
+     let boundSize = UIScreen.main.bounds.size
+     var contentFrame = detailImage.frame
+     
+     if contentFrame.size.width < boundSize.width {
+     contentFrame.origin.x = (boundSize.width - contentFrame.size.width) / 2
+     } else {
+     contentFrame.origin.x = 0
+     }
+     if contentFrame.size.height < boundSize.height {
+     contentFrame.origin.y = (boundSize.height - contentFrame.size.height) / 2
+     } else {
+     contentFrame.origin.y = 0
+     }
+     
+     detailImage.frame = contentFrame
+     
+     }*/
     
     ///程式暫停時存取資料庫
     @objc fileprivate func resigningActive() {
