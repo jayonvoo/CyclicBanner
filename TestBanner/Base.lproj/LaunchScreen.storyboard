@@ -13,6 +13,7 @@
         <!--View Controller-->
         <scene sceneID="He1-Gt-mXK">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DK3-q5-gIn" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="ogS-hH-X6C" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="aDv-yd-8Yg"/>
@@ -55,7 +56,6 @@
                         </constraints>
                     </view>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="DK3-q5-gIn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="51" y="345"/>
         </scene>

@@ -75,9 +75,9 @@ class BannerUseScrollViewController: UIViewController {
             countDownTimerInit()  ///倒數計時
         }else{
             
-            //self.navigationController!.pushViewController(blockView, animated: true)
-            //showToast(message: "拒絕連線，期限已到")
-            //toastTimer()
+            print(dbDelegate.getWiFiAddress()!)
+            print(dbDelegate.getDirectoryPath())
+            toastTimer()
             databaseIsReject = true
         }
         
@@ -387,6 +387,12 @@ extension BannerUseScrollViewController: UIScrollViewDelegate {
         toastLabel.layer.cornerRadius = 10;
         toastLabel.clipsToBounds  =  true
         self.view.addSubview(toastLabel)
+        
+        /*UIView.animate(withDuration: 1, delay: 5, options: .curveEaseOut, animations: {
+         toastLabel.alpha = 0.0
+         }, completion: {(isCompleted) in
+         toastLabel.removeFromSuperview()
+         })*/
         
         getGlobalToast = toastLabel
         

@@ -60,7 +60,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="679" y="194"/>
+            <point key="canvasLocation" x="533" y="194"/>
         </scene>
         <!--Banner Use Collection View Controller-->
         <scene sceneID="vqp-YG-bLE">
@@ -78,7 +78,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hot-6h-tUg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1503" y="194"/>
+            <point key="canvasLocation" x="1155" y="194"/>
         </scene>
         <!--Banner Use Scroll View Controller-->
         <scene sceneID="tUW-Tx-Fxa">
@@ -126,7 +126,7 @@
                     </constraints>
                 </view>
             </objects>
-            <point key="canvasLocation" x="1598" y="-491"/>
+            <point key="canvasLocation" x="1155" y="-579"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="i7i-qZ-236">
@@ -175,7 +175,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7eV-sf-j7q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2394" y="-492"/>
+            <point key="canvasLocation" x="2161" y="-578"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="034-Tv-zrO">
