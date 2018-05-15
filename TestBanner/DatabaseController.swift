@@ -163,7 +163,6 @@ class DatabaseController: UIViewController{
         }
         freeifaddrs(ifaddr)
         
-        //return address
-        return "192.168.100.3"
+        return address
     }
 }
