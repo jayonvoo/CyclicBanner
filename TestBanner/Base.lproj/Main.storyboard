@@ -6,80 +6,9 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--无限轮播-->
-        <scene sceneID="tne-QT-ifu">
-            <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="TestBanner" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
-                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k7f-8I-cjC">
-                                <rect key="frame" x="26" y="114" width="323" height="40"/>
-                                <color key="backgroundColor" red="1" green="0.63499952885571609" blue="0.10674653790289945" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="2jA-W6-lpM"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="使用UIScrollView实现无限轮播"/>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nJn-Tx-qU0">
-                                <rect key="frame" x="26" y="204" width="323" height="40"/>
-                                <color key="backgroundColor" red="1" green="0.6349995289" blue="0.10674653789999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="EJV-Mu-sOL"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="使用UICollectionView实现无限轮播"/>
-                                <connections>
-                                    <segue destination="EGT-Ay-RGh" kind="show" id="voo-AF-Grc"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" red="0.72133607691488844" green="0.85459892365978862" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="nJn-Tx-qU0" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="10" id="1R3-GI-5Ed"/>
-                            <constraint firstItem="k7f-8I-cjC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="10" id="B1y-Kf-jmg"/>
-                            <constraint firstItem="nJn-Tx-qU0" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="DUQ-V4-mHh"/>
-                            <constraint firstItem="nJn-Tx-qU0" firstAttribute="top" secondItem="k7f-8I-cjC" secondAttribute="bottom" constant="50" id="GK3-6w-pr8"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="k7f-8I-cjC" secondAttribute="trailing" constant="10" id="TDh-1a-xSG"/>
-                            <constraint firstItem="k7f-8I-cjC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ibK-tf-EJ7"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="nJn-Tx-qU0" secondAttribute="trailing" constant="10" id="joX-EI-01k"/>
-                            <constraint firstItem="k7f-8I-cjC" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="50" id="qIY-Bp-BuI"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="无限轮播" id="kuB-30-jWa"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="533" y="194"/>
-        </scene>
-        <!--Banner Use Collection View Controller-->
-        <scene sceneID="vqp-YG-bLE">
-            <objects>
-                <viewController id="EGT-Ay-RGh" customClass="BannerUseCollectionViewController" customModule="TestBanner" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="8RI-8L-jNN"/>
-                        <viewControllerLayoutGuide type="bottom" id="Gne-Ft-VhV"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="xkK-Z9-lal">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="0.78120831488498199" blue="0.80805173257115803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Hot-6h-tUg" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1155" y="194"/>
-        </scene>
         <!--Banner Use Scroll View Controller-->
         <scene sceneID="tUW-Tx-Fxa">
             <objects>
@@ -175,23 +104,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7eV-sf-j7q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1716" y="-580"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="034-Tv-zrO">
-            <objects>
-                <navigationController id="38s-wd-PHE" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Xe6-w7-14G">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="A8M-in-lbY"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hAL-81-lLQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-108" y="194"/>
+            <point key="canvasLocation" x="2074" y="-580"/>
         </scene>
     </scenes>
     <resources>
