@@ -28,6 +28,7 @@ class BannerUseScrollViewController: UIViewController {
     var linkPlayer = [Int : AVPlayer]()
     var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     var blockView = BlockViewController()
+    var getSubArr = [Any]()
     
     @IBOutlet var popUpBoxView: UIView!
     
@@ -103,8 +104,11 @@ class BannerUseScrollViewController: UIViewController {
             let screenHeight = screenSize.height
             
             scrollView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
+            scrollView.contentSize = CGSize(width: screenWidth * 3, height: screenHeight)
             
             for i in 0..<getPathArray.count{
+                
+                print(scrollView.subviews[i])
                 scrollView.subviews[i].frame.origin.x = screenWidth * CGFloat(i)
                 scrollView.subviews[i].frame.size.width = screenWidth
                 scrollView.subviews[i].frame.size.height = screenHeight
@@ -113,6 +117,25 @@ class BannerUseScrollViewController: UIViewController {
         
         if UIDeviceOrientationIsPortrait(UIDevice.current.orientation) {
             print("Portrait")
+            
+            
+            
+            let screenSize = UIScreen.main.bounds
+            let screenWidth = screenSize.width
+            let screenHeight = screenSize.height
+            
+            scrollView.frame = CGRect(x: 0, y: 200, width: screenWidth, height: 250)
+            scrollView.contentSize = CGSize(width: screenWidth * 3, height: 0)
+            
+            
+            print("portrait width: \(screenHeight)")
+            
+            for i in 0..<getPathArray.count{
+                scrollView.subviews[i].frame.origin.x = screenWidth * CGFloat(i)
+                scrollView.subviews[i].frame.size.width = screenWidth
+                scrollView.subviews[i].frame.size.height = 250
+            }
+            
         }
     }
     
@@ -264,6 +287,9 @@ class BannerUseScrollViewController: UIViewController {
             
             let contentOffset = CGPoint(x: screenWidth * getPage, y: 0)
             scrollView.setContentOffset(contentOffset, animated: true)
+            print("get subviews:\(scrollView.subviews[0])")
+            print("get subviews:\(scrollView.subviews[1])")
+            print("get subviews:\(scrollView.subviews[2])")
             if type(of: scrollView.subviews[pageView.currentPage]) != type(of: UIImageView()){
                 
                 linkPlayer[pageView.currentPage]?.play()
