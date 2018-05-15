@@ -27,8 +27,6 @@ class BannerUseScrollViewController: UIViewController {
     var getTimeAuth: String?
     var linkPlayer = [Int : AVPlayer]()
     var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-    var blockView = BlockViewController()
-    var getSubArr = [Any]()
     
     @IBOutlet var popUpBoxView: UIView!
     
@@ -95,7 +93,7 @@ class BannerUseScrollViewController: UIViewController {
     }
     
     override func viewWillLayoutSubviews() {
-        //setupScale()
+        //調整橫向熒幕時全屏
         if UIDeviceOrientationIsLandscape(UIDevice.current.orientation) {
             print("Landscape")
             
@@ -115,10 +113,9 @@ class BannerUseScrollViewController: UIViewController {
             }
         }
         
+        //調整16:9視窗
         if UIDeviceOrientationIsPortrait(UIDevice.current.orientation) {
             print("Portrait")
-            
-            
             
             let screenSize = UIScreen.main.bounds
             let screenWidth = screenSize.width
@@ -150,11 +147,10 @@ class BannerUseScrollViewController: UIViewController {
         
         do {
             pageView = UIPageControl(frame: CGRect(x: 0, y: kScreenHeight - 30, width: kScreenWidth, height: 30))
-            view.addSubview(pageView)
+            
             pageView.numberOfPages = getPathArray.count
             pageView.currentPage = 0
-            //pageView.pageIndicatorTintColor = UIColor.white
-            //pageView.currentPageIndicatorTintColor = UIColor.blue
+            
         }
         
         do {
@@ -169,6 +165,7 @@ class BannerUseScrollViewController: UIViewController {
                     playerLayer.view.frame = CGRect(x: CGFloat(index) * kScreenWidth, y: 0, width: kScreenWidth, height: 250)
                     player?.pause()
                     linkPlayer[index] = player
+                    playerLayer.showsPlaybackControls = false
                     
                     scrollView.addSubview(playerLayer.view)
                     playerLayer.didMove(toParentViewController: self)
@@ -396,40 +393,6 @@ class BannerUseScrollViewController: UIViewController {
             self.popUpBoxView.transform = CGAffineTransform.identity
         }
     }
-    /*
-     func setupScale() {
-     
-     scrollView.frame = UIScreen.main.bounds
-     scrollView.contentSize = (detailImage.image?.size)!
-     scrollViewContents()
-     let scrollViewFrame = scrollView.frame
-     let scaleWidth = scrollViewFrame.size.width / scrollView.contentSize.width
-     let scaleHieght = scrollViewFrame.size.height / scrollView.contentSize.height
-     let minScale = min(scaleHieght, scaleWidth)
-     scrollView.minimumZoomScale = minScale
-     scrollView.maximumZoomScale = 1
-     scrollView.zoomScale = minScale
-     }*/
-    /*
-     func scrollViewContents() {
-     
-     let boundSize = UIScreen.main.bounds.size
-     var contentFrame = detailImage.frame
-     
-     if contentFrame.size.width < boundSize.width {
-     contentFrame.origin.x = (boundSize.width - contentFrame.size.width) / 2
-     } else {
-     contentFrame.origin.x = 0
-     }
-     if contentFrame.size.height < boundSize.height {
-     contentFrame.origin.y = (boundSize.height - contentFrame.size.height) / 2
-     } else {
-     contentFrame.origin.y = 0
-     }
-     
-     detailImage.frame = contentFrame
-     
-     }*/
     
     ///程式暫停時存取資料庫
     @objc fileprivate func resigningActive() {
