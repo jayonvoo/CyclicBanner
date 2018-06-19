@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "checkWebsite(getUrl:):BannerUseScrollViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "BannerUseScrollViewController.viewDidLoad():BannerUseScrollViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DatabaseController.getDBValue_address(ip_address:):DatabaseController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "BannerUseScrollViewController.nextImage():BannerUseScrollViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "scrollView.subviews[pageView.currentPage]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "BannerUseScrollViewController.countDownTimer():BannerUseScrollViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in checkWebsite(getUrl:):BannerUseScrollViewController.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

@@ -232,7 +232,7 @@ class BannerUseScrollViewController: UIViewController {
         guard let timer = countDown else {
             return
         }
-        RunLoop.current.add(timer, forMode: .commonModes)
+        //RunLoop.current.add(timer, forMode: .commonModes)
     }
     
     func toastTimer(){
